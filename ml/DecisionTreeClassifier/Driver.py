@@ -7,6 +7,7 @@ __author__ = 'zwy'
 
 import sys
 import DecisionTreeClassifier
+import DecisionTreeModel
 
 args = sys.argv
 if len(args) < 2:
@@ -32,5 +33,6 @@ else:
 
 		dataSet.append(data)
 	
-	
-	DecisionTreeClassifier.train(dataSet, 3, 4, 10, 1e-12)
+	s = int(len(dataSet) * 0.8)
+	model = DecisionTreeClassifier.train(dataSet[0:s], 3, 4, 10, 1e-12)
+	print(model.test(dataSet[s:len(dataSet)]))

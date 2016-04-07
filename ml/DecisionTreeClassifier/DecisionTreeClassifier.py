@@ -7,6 +7,7 @@ __author__ = 'zwy'
 
 import Node
 import Impurity
+import DecisionTreeModel
 from functools import reduce
 
 def _majorityClass(classVec, numClasses):
@@ -28,7 +29,7 @@ def _createBranch(dataSet, numClasses, numFeatures, maxDepth, impurityThreshold,
 	classVec = [x[-1] for x in dataSet]
 	currImpurity = Impurity.entropy(classVec, numClasses)
 	if(currImpurity < impurityThreshold or currDepth >= maxDepth):
-		currNode = Node.LeafNode('leaf', _majorityClass(classVec, numClasses))
+		currNode = Node.LeafNode('leaf', _majorityClass(classVec, numClasses), currDepth)
 		return currNode
 
 
@@ -38,9 +39,9 @@ def _createBranch(dataSet, numClasses, numFeatures, maxDepth, impurityThreshold,
 	splitPoint = 0.0
 	minImpurity = 0.0
 	bestSubSets = None
+	numSubSets = 2
 	for featureId in range(numFeatures):
 		dataSet.sort(key = lambda x: x[featureId])
-		numSubSets = 2
 		for splitPosition in range(n):
 			subSetsEntropy = []
 			subSets = []
@@ -67,12 +68,13 @@ def _createBranch(dataSet, numClasses, numFeatures, maxDepth, impurityThreshold,
 				flag = True
 
 	children = [_createBranch(x, numClasses, numFeatures, maxDepth, impurityThreshold, currDepth + 1) for x in bestSubSets]
-	currNode = Node.SplitNode('split', (splitFeature, splitPoint), children)
-
+	currNode = Node.SplitNode('split', (splitFeature, splitPoint), children, currDepth)
+	
 	return currNode
 
 def train(dataSet, numClasses, numFeatures, maxDepth, impurityThreshold):
-	return _createBranch(dataSet, numClasses, numFeatures, maxDepth, impurityThreshold, 1)
+	model = DecisionTreeModel.DecisionTreeModel(_createBranch(dataSet, numClasses, numFeatures, maxDepth, impurityThreshold, 1))
+	return model
 
 
 

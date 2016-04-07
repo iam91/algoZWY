@@ -7,20 +7,24 @@ __author__ = 'zwy'
 
 # base node
 class Node(object):
-	def __init__(self, nodeType):
+	def __init__(self, nodeType, depth):
 		self.__nodeType = nodeType
-		print(nodeType)
+		self.__depth = depth
+		#print(nodeType)
 
 	def getNodeType(self):
 		return self.__nodeType
 
+	def getDepth(self):
+		return self.__depth
+
 # split node
 class SplitNode(Node):
-	def __init__(self, nodeType, split, children):
-		Node.__init__(self, nodeType)
+	def __init__(self, nodeType, split, children, depth):
+		Node.__init__(self, nodeType, depth)
 		self.__split = split
 		self.__children = children
-		print(nodeType)
+		#print(nodeType)
 
 	def getSplit(self):
 		return self.__split
@@ -30,8 +34,8 @@ class SplitNode(Node):
 
 # leaf node
 class LeafNode(Node): 
-	def __init__(self, nodeType, classLabel):
-		Node.__init__(self, nodeType)
+	def __init__(self, nodeType, classLabel, depth):
+		Node.__init__(self, nodeType, depth)
 		self.__classLabel = classLabel
 
 	def getClassLabel(self):
