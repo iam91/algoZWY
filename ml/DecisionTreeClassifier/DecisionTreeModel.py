@@ -13,6 +13,11 @@ class DecisionTreeModel(object):
 
 	def test(self, dataSet):
 		result = [self.__singleTest(data) == data[-1] for data in dataSet]
+		cnt = 0
+		for re in result:
+			if(not re):
+				cnt += 1
+		print(cnt / len(result))
 		return result
 
 	def __singleTest(self, data):
@@ -25,8 +30,13 @@ class DecisionTreeModel(object):
 		elif(type == 'split'):
 			split = node.getSplit()
 			splitFeature = split[0]
-			splitPoint = split[1]
-			if(data[splitFeature] < splitPoint):
-				return self.__traverse(data, node.getChildren()[0])
-			else:
-				return self.__traverse(data, node.getChildren()[1])
+			splitPoints = split[1]
+			numOfSplitPoints = len(splitPoints)
+
+			cnt = 0
+			for splitPoint in splitPoints:
+				if(data[splitFeature] < splitPoint):
+					return self.__traverse(data, node.getChildren()[cnt])
+				elif(cnt >= numOfSplitPoints - 1):
+					return self.__traverse(data, node.getChildren()[cnt + 1])
+				cnt += 1
