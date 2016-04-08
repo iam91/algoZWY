@@ -134,10 +134,4 @@ def train(dataSet, numClasses, numFeatures, maxDepth, maxBin, impurityThreshold,
 
 	model = DecisionTreeModel.DecisionTreeModel(_createBranch(dataSet, numClasses, numFeatures, maxDepth, maxBin, impurityThreshold, 1, categoricalFeaturesInfo))
 	return model
-
-
-
-
-
-
-
+	

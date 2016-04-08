@@ -27,3 +27,4 @@ def entropy(classVec, numClasses):
 			entropy.append(- p * math.log(p))
 
 	return reduce(lambda x, y: x + y, entropy)
+	

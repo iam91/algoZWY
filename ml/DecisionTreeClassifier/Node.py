@@ -40,3 +40,4 @@ class LeafNode(Node):
 
 	def getClassLabel(self):
 		return self.__classLabel
+		

@@ -40,3 +40,4 @@ class DecisionTreeModel(object):
 				elif(cnt >= numOfSplitPoints - 1):
 					return self.__traverse(data, node.getChildren()[cnt + 1])
 				cnt += 1
+				
