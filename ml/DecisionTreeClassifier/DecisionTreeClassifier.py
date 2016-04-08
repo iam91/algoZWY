@@ -48,11 +48,9 @@ def _createBranch(dataSet, numClasses, numFeatures, maxDepth, maxBin, impurityTh
 		currNode = Node.LeafNode('leaf', _majorityClass(classVec, numClasses), currDepth)
 		return currNode
 
-	# continuous feature, numSubSets = 2
-	flag = False
 	splitFeature = 0
 	splitPoint = None
-	minImpurity = 0.0
+	minImpurity = math.log(numClasses)
 	bestSubSets = None
 	for featureId in range(numFeatures):
 		dataSet.sort(key = lambda x: x[featureId])
@@ -100,16 +98,7 @@ def _createBranch(dataSet, numClasses, numFeatures, maxDepth, maxBin, impurityTh
 				subSetsClassVec = [x[-1] for x in subSet]
 				subSetsEntropy.append((len(subSet) / n) * Impurity.entropy(subSetsClassVec, numClasses))
 			weightedImpurity = reduce(lambda x, y: x + y, subSetsEntropy)
-			if(flag):
-				if(minImpurity > weightedImpurity):
-					splitFeature = featureId
-					splitPoints = []
-					for position in splitPositions:
-						splitPoints.append(dataSet[position][splitFeature])
-					splitPoint = splitPoints
-					minImpurity = weightedImpurity
-					bestSubSets = subSets
-			else:
+			if(minImpurity > weightedImpurity):
 				splitFeature = featureId
 				splitPoints = []
 				for position in splitPositions:
@@ -117,7 +106,6 @@ def _createBranch(dataSet, numClasses, numFeatures, maxDepth, maxBin, impurityTh
 				splitPoint = splitPoints
 				minImpurity = weightedImpurity
 				bestSubSets = subSets
-				flag = True
 
 	children = [_createBranch(x, numClasses, numFeatures, maxDepth, maxBin, impurityThreshold, currDepth + 1, categoricalFeaturesInfo) for x in bestSubSets]
 	currNode = Node.SplitNode('split', (splitFeature, splitPoint), children, currDepth)
