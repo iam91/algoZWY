@@ -47,5 +47,5 @@ else:
 		elif(classLabel == 'L'):
 			data.append(2)
 		dataSet.append(data)'''
-	KNNClassifier._singleClassify(dataSet, [], 4)
-	
+	r = KNNClassifier.test(dataSet, dataSet, 10, 4, 3)
+	print(r)

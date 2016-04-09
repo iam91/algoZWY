@@ -50,6 +50,6 @@ else:
 			data.append(2)
 		dataSet.append(data)
 	
-	model = DecisionTreeClassifier.train(dataSet, 3, 4, 10, 10, 1e-12, {0: 5, 1: 5, 2: 5, 3: 5})
+	model = DecisionTreeClassifier.train(dataSet, 3, 4, 10, 10, 1e-17, {0: 5, 1: 5, 2: 5, 3: 5})
 	print(model.test(dataSet))
 	

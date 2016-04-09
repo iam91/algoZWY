@@ -37,7 +37,7 @@ def _equal(x, y):
 	if(isinstance(x, int) and isinstance(y, int)):
 		return x == y
 	elif(isinstance(x, float) or isinstance(y, float)):
-		return abs(x - y) < 1e-12
+		return abs(x - y) < 1e-17
 
 
 def _createBranch(dataSet, numClasses, numFeatures, maxDepth, maxBin, impurityThreshold, currDepth, categoricalFeaturesInfo):

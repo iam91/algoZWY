@@ -12,7 +12,7 @@ class DecisionTreeModel(object):
 		self.__root = root
 
 	def test(self, dataSet):
-		result = [self.__singleTest(data) == data[-1] for data in dataSet]
+		result = [self.singleClassify(data) == data[-1] for data in dataSet]
 		cnt = 0
 		for re in result:
 			if(not re):
@@ -20,7 +20,7 @@ class DecisionTreeModel(object):
 		print(cnt / len(result))
 		return result
 
-	def __singleTest(self, data):
+	def singleClassify(self, data):
 		return self.__traverse(data, self.__root)
 
 	def __traverse(self, data, node):
