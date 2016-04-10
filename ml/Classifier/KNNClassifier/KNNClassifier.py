@@ -20,8 +20,8 @@ k(int)
 numFeatures(int)
 numClasses(int)
 '''
-def test(dataSet, testDataSet, k, numFeatures, numClasses):
-	result = [singleClassify(dataSet, data, k, numFeatures, numClasses) == data[-1] for data in testDataSet]
+def test(dataSet, testDataSet, k, numFeatures, numClasses, categoricalFeaturesInfo):
+	result = [singleClassify(dataSet, data, k, numFeatures, numClasses, categoricalFeaturesInfo) == data[-1] for data in testDataSet]
 	cnt = 0
 	for re in result:
 		if(not re):
@@ -37,38 +37,43 @@ k(int)
 numFeatures(int)
 numClasses(int)
 '''
-def singleClassify(dataSet, testData, k, numFeatures, numClasses):
+def singleClassify(dataSet, testData, k, numFeatures, numClasses, categoricalFeaturesInfo):
 	n = len(dataSet)
 	if(k > n):
 		print('Bad k!')
 		return None
-	# normalization
-	# normalize value to [0, 1] but resulting in high requirement on float accuracy
+	# normalization (ordinal value ignored)
+	# normalize continous value to [-1, 1] but resulting in high requirement on float accuracy
 	normalizedDataSet = [[] for x in dataSet]
 	normalizedTestData = [0.0 for i in range(numFeatures)]
 	normalizedTestData.append(testData[-1])
 	for i in range(numFeatures):
-		featureVal = [x[i] for x in dataSet]
-		maxVal = max(featureVal)
-		minVal = min(featureVal)
-		interval = maxVal - minVal
-		if(interval != 0):
-			normalized = [(x - minVal) / interval for x in featureVal]
-			normalizedTestData[i] = (testData[i] - minVal) / interval
+		if(i in categoricalFeaturesInfo):
+			for j in range(n):
+				normalizedDataSet[j].append(dataSet[j][i])
+				normalizedTestData[i] = testData[i]
 		else:
-			#Should this feature be ignored? After all, it's useless
-			normalized = [1.0 for x in featureVal]
-			normalizedTestData[i] = 1.0
-		for j in range(n):
-			normalizedDataSet[j].append(normalized[j])
+			featureVal = [abs(x[i]) for x in dataSet]
+			maxVal = max(featureVal)
+			minVal = min(featureVal)
+			interval = maxVal - minVal
+			if(interval != 0):
+				normalized = [(x - (abs(x) / x) * minVal) / interval for x in featureVal]
+				normalizedTestData[i] = (testData[i] - minVal) / interval
+			else:
+				#Should this feature be ignored? After all, it's useless
+				normalized = [1.0 for x in featureVal]
+				normalizedTestData[i] = 1.0
+			for j in range(n):
+				normalizedDataSet[j].append(normalized[j])
 
 
 	for i in range(n):
 		normalizedDataSet[i].append(dataSet[i][-1])
 
 	#classify
-	distances = [[_distance(x, normalizedTestData, numFeatures), x[-1]] for x in normalizedDataSet]
-
+	distances = [[_distance(x, normalizedTestData, numFeatures, categoricalFeaturesInfo), x[-1]] for x in normalizedDataSet]
+	
 	distances.sort(key = lambda x: x[0])
 
 	kneighborsClass = [x[-1] for x in distances[0: k]]
@@ -78,11 +83,14 @@ def singleClassify(dataSet, testData, k, numFeatures, numClasses):
 '''
 Euclidean distance
 '''
-def _distance(a, b, numFeatures):
+def _distance(a, b, numFeatures, categoricalFeaturesInfo):
 	diff = []
 	for i in range(numFeatures):
-		diff.append(a[i] - b[i])
-
+		if(i in categoricalFeaturesInfo):
+			inter = categoricalFeaturesInfo[i] - 1
+			diff.append((a[i] - b[i]) / inter)
+		else:
+			diff.append(a[i] - b[i])
 	squaredDiff = [x * x for x in diff]
 	dist = math.sqrt(reduce(lambda x, y: x + y, squaredDiff))
 	return dist
