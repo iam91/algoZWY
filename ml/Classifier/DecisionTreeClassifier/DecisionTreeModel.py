@@ -5,7 +5,7 @@
 
 __author__ = 'zwy'
 
-import Node
+import DecisionTreeClassifier.Node
 
 class DecisionTreeModel(object):
 	def __init__(self, root):

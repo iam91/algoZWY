@@ -12,9 +12,9 @@ Nominal features not implemented yet.
 '''
 
 import math
-import Node
-import Impurity
-import DecisionTreeModel
+import DecisionTreeClassifier.Node
+import DecisionTreeClassifier.Impurity
+import DecisionTreeClassifier.DecisionTreeModel
 from functools import reduce
 
 
@@ -43,9 +43,9 @@ def _equal(x, y):
 def _createBranch(dataSet, numClasses, numFeatures, maxDepth, maxBin, impurityThreshold, currDepth, categoricalFeaturesInfo):
 	n = len(dataSet)
 	classVec = [x[-1] for x in dataSet]
-	currImpurity = Impurity.entropy(classVec, numClasses)
+	currImpurity = DecisionTreeClassifier.Impurity.entropy(classVec, numClasses)
 	if(currImpurity < impurityThreshold or currDepth >= maxDepth):
-		currNode = Node.LeafNode('leaf', _majorityClass(classVec, numClasses), currDepth)
+		currNode = DecisionTreeClassifier.Node.LeafNode('leaf', _majorityClass(classVec, numClasses), currDepth)
 		return currNode
 
 	splitFeature = 0
@@ -96,7 +96,7 @@ def _createBranch(dataSet, numClasses, numFeatures, maxDepth, maxBin, impurityTh
 					splitPositions.append(splitRange[1])
 				subSets.append(subSet)
 				subSetsClassVec = [x[-1] for x in subSet]
-				subSetsEntropy.append((len(subSet) / n) * Impurity.entropy(subSetsClassVec, numClasses))
+				subSetsEntropy.append((len(subSet) / n) * DecisionTreeClassifier.Impurity.entropy(subSetsClassVec, numClasses))
 			weightedImpurity = reduce(lambda x, y: x + y, subSetsEntropy)
 			if(minImpurity > weightedImpurity):
 				splitFeature = featureId
@@ -108,7 +108,7 @@ def _createBranch(dataSet, numClasses, numFeatures, maxDepth, maxBin, impurityTh
 				bestSubSets = subSets
 
 	children = [_createBranch(x, numClasses, numFeatures, maxDepth, maxBin, impurityThreshold, currDepth + 1, categoricalFeaturesInfo) for x in bestSubSets]
-	currNode = Node.SplitNode('split', (splitFeature, splitPoint), children, currDepth)
+	currNode = DecisionTreeClassifier.Node.SplitNode('split', (splitFeature, splitPoint), children, currDepth)
 	
 	return currNode
 
@@ -132,6 +132,6 @@ def train(dataSet, numClasses, numFeatures, maxDepth, maxBin, impurityThreshold,
 			numOfSplits = 2
 		categoricalFeaturesInfo[k] = numOfSplits
 
-	model = DecisionTreeModel.DecisionTreeModel(_createBranch(dataSet, numClasses, numFeatures, maxDepth, maxBin, impurityThreshold, 1, categoricalFeaturesInfo))
+	model = DecisionTreeClassifier.DecisionTreeModel.DecisionTreeModel(_createBranch(dataSet, numClasses, numFeatures, maxDepth, maxBin, impurityThreshold, 1, categoricalFeaturesInfo))
 	return model
 	

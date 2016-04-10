@@ -74,6 +74,7 @@ def singleClassify(dataSet, testData, k, numFeatures, numClasses):
 	kneighborsClass = [x[-1] for x in distances[0: k]]
 	return _majorityClass(kneighborsClass, numClasses)
 
+
 '''
 Euclidean distance
 '''

@@ -1,27 +1,31 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-' Driver for DecisionTreeClassifier '
+' Driver for Classifier '
 
 __author__ = 'zwy'
 
 import sys
-import DecisionTreeClassifier
-import DecisionTreeModel
+#DecisionTreeClassifier
+import DecisionTreeClassifier.DecisionTreeClassifier
+import DecisionTreeClassifier.DecisionTreeModel
+#KNNClassifier
+import KNNClassifier.KNNClassifier
 
 args = sys.argv
-if len(args) < 2:
-	print('Usage: data file.')
+if len(args) < 3:
+	print('Usage: data file and classifier')
 	exit()
 else:
 	fileDir = args[1]
+	classifier = args[2]
 	dataFile = open(fileDir, 'r')
 	rawData = [line.strip('\n').split(',') for line in dataFile.readlines()]
 	
 	# format the dataset into [feature1, feature2, ..., featuren, class]
 
 	# format iris
-	'''
+	
 	dataSet = []
 	for line in rawData:
 		classLabel = line[-1]
@@ -35,9 +39,10 @@ else:
 			data.append(2)
 
 		dataSet.append(data)
-	'''
+	
 	
 	# format balance-scale
+	'''
 	dataSet = []
 	for line in rawData:
 		classLabel = line[0]
@@ -49,7 +54,11 @@ else:
 		elif(classLabel == 'L'):
 			data.append(2)
 		dataSet.append(data)
+	'''
 	
-	model = DecisionTreeClassifier.train(dataSet, 3, 4, 10, 10, 1e-17, {0: 5, 1: 5, 2: 5, 3: 5})
-	print(model.test(dataSet))
+	if(classifier == 'DecisionTreeClassifier'):
+		model = DecisionTreeClassifier.DecisionTreeClassifier.train(dataSet, 3, 4, 10, 10, 1e-17, {0: 5, 1: 5, 2: 5, 3: 5})
+		print(model.test(dataSet))
+	elif(classifier == 'KNNClassifier'):
+		print(KNNClassifier.KNNClassifier.test(dataSet, dataSet, 10, 4, 3))
 	
