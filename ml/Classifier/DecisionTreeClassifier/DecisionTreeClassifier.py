@@ -17,7 +17,6 @@ import DecisionTreeClassifier.Impurity
 import DecisionTreeClassifier.DecisionTreeModel
 from functools import reduce
 
-
 def _majorityClass(classVec, numClasses):
 	cnt = [0 for x in range(numClasses)]
 	for label in classVec:

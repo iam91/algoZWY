@@ -18,6 +18,7 @@ class Node(object):
 	def getDepth(self):
 		return self.__depth
 
+
 # split node
 class SplitNode(Node):
 	def __init__(self, nodeType, split, children, depth):
@@ -31,6 +32,7 @@ class SplitNode(Node):
 
 	def getChildren(self):
 		return self.__children
+
 
 # leaf node
 class LeafNode(Node): 

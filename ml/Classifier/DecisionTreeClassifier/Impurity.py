@@ -12,6 +12,7 @@ from functools import reduce
 def gini(classVec, numClasses):
 	pass
 
+
 def entropy(classVec, numClasses):
 	cnt = [0 for x in range(numClasses)]
 	tot = len(classVec)

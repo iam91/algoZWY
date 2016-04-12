@@ -29,6 +29,7 @@ def test(dataSet, testDataSet, k, numFeatures, numClasses, categoricalFeaturesIn
 	print(cnt / len(result))
 	return result
 
+
 '''
 Parameter format:
 dataSet(list) [val1, val2, val3, ..., class]

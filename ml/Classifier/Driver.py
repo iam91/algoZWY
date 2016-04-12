@@ -21,7 +21,7 @@ else:
 	classifier = args[2]
 	dataFile = open(fileDir, 'r')
 	rawData = [line.strip('\n').split(',') for line in dataFile.readlines()]
-	
+	dataFile.close()
 	# format the dataset into [feature1, feature2, ..., featuren, classlabel]
 	# class labels take the value 0, 1, 2, ... and -1 for known class
 	# ordinal features take the value 1, 2, 3, ...
@@ -63,4 +63,6 @@ else:
 		print(model.test(dataSet))
 	elif(classifier == 'KNNClassifier'):
 		print(KNNClassifier.KNNClassifier.test(dataSet, dataSet, 10, 4, 3, {0: 5, 1: 5, 2: 5, 3: 5}))
+	elif(classifier == 'LogisticRegression'):
+		
 	
