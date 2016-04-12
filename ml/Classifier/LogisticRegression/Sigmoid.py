@@ -5,8 +5,10 @@
 
 __author__ = 'zwy'
 
+import math
+
 def sigmoid(x):
-	return 1 / (1 + exp(-x))
+	return 1 / (1 + math.exp(-x))
 
 
 def dotProduct(x, y):
@@ -14,5 +16,5 @@ def dotProduct(x, y):
 	ret = 0.0
 	for i in range(n):
 		ret += x[i] * y[i]
-	return 
+	return ret
 

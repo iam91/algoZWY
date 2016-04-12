@@ -13,6 +13,7 @@ import DecisionTreeClassifier.DecisionTreeModel
 import KNNClassifier.KNNClassifier
 #LogisticRegression
 import LogisticRegression.LogisticRegression
+import LogisticRegression.LogisticRegressionModel
 
 args = sys.argv
 if len(args) < 3:
@@ -67,5 +68,6 @@ else:
 	elif(classifier == 'KNNClassifier'):
 		print(KNNClassifier.KNNClassifier.test(dataSet, dataSet, 10, 4, 3, {0: 5, 1: 5, 2: 5, 3: 5}))
 	elif(classifier == 'LogisticRegression'):
-		LogisticRegression.LogisticRegression.train(dataSet, 4, [1.0, 1.0, 1.0, 1.0, 1.0], 4, 4)
+		model = LogisticRegression.LogisticRegression.train(dataSet[1:len(dataSet)], 4, [0.0, 0.0, 0.0, 0.0, 0.0], 100, 0.000001)
+		print(model.test(dataSet[1:len(dataSet)], 4))
 	

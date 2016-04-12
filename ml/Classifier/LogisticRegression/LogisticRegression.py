@@ -9,7 +9,6 @@ __author__ = 'zwy'
 Work on continuous features, applied to binary classification
 '''
 
-import math
 import LogisticRegression.LogisticRegressionModel
 import LogisticRegression.Sigmoid
 
@@ -23,16 +22,17 @@ alpha(float)
 '''
 def train(dataSet, numFeatures, initTheta, maxIter, alpha):
 	n = len(dataSet)
-	trainingDataSet = [x for x in dataSet]
+	trainingDataSet = [x * 1 for x in dataSet]
 	for trainingData in trainingDataSet:
 		trainingData.insert(0, 1.0)
 
-	theta = [x for x in initTheta]
+	theta = [x * 1 for x in initTheta]
 	for i in range(maxIter):
+		tempTheta = [x * 1 for x in theta]
 		for j in range(numFeatures + 1):
-			theta[j] -= _gradTheta(trainingDataSet, numFeatures, j, theta, alpha)
+			theta[j] += _gradTheta(trainingDataSet, numFeatures, j, tempTheta, alpha)
 
-	model = LogisticRegression.LogisticRegressionModel(theta)
+	model = LogisticRegression.LogisticRegressionModel.LogisticRegressionModel(theta)
 	return model
 
 
@@ -52,3 +52,8 @@ def _sigmoid(x):
 
 def _dotProduct(x, y):
 	return LogisticRegression.Sigmoid.dotProduct(x, y)
+
+'''
+ big number
+ learning rate
+'''
