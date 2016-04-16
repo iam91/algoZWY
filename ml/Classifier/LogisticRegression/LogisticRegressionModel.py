@@ -39,3 +39,6 @@ class LogisticRegressionModel(object):
 				cnt += 1
 		print(cnt / len(result))
 		return result
+
+	def printModel(self):
+		print(self.__thetaVec)

@@ -68,6 +68,8 @@ else:
 	elif(classifier == 'KNNClassifier'):
 		print(KNNClassifier.KNNClassifier.test(dataSet, dataSet, 10, 4, 3, {0: 5, 1: 5, 2: 5, 3: 5}))
 	elif(classifier == 'LogisticRegression'):
-		model = LogisticRegression.LogisticRegression.train(dataSet[1:len(dataSet)], 4, [0.0, 0.0, 0.0, 0.0, 0.0], 100, 0.000001)
+		model = LogisticRegression.LogisticRegression.train(dataSet[1:len(dataSet)], 4, [0.0, 0.0, 0.0, 0.0, 0.0], 1, 0.01, 'stoc')
 		print(model.test(dataSet[1:len(dataSet)], 4))
+		#model.test(dataSet[1:len(dataSet)], 4)
+		model.printModel()
 	
