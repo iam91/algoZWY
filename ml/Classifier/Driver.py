@@ -66,7 +66,7 @@ else:
 		model = DecisionTreeClassifier.DecisionTreeClassifier.train(dataSet, 3, 4, 10, 10, 1e-17, {0: 5, 1: 5, 2: 5, 3: 5})
 		print(model.test(dataSet))
 	elif(classifier == 'KNNClassifier'):
-		print(KNNClassifier.KNNClassifier.test(dataSet, dataSet, 10, 4, 3, {0: 5, 1: 5, 2: 5, 3: 5}))
+		print(KNNClassifier.KNNClassifier.test(dataSet, dataSet, 10, 4, 3, {0: 5, 1: 5, 2: 5, 3: 5}, 10))
 	elif(classifier == 'LogisticRegression'):
 		model = LogisticRegression.LogisticRegression.train(dataSet[1:len(dataSet)], 4, [0.0, 0.0, 0.0, 0.0, 0.0], 1, 0.01, 'stoc')
 		print(model.test(dataSet[1:len(dataSet)], 4))

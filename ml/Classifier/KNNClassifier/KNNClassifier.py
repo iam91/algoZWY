@@ -19,9 +19,10 @@ testData(list) [val1, val2, val3, ..., class]
 k(int)
 numFeatures(int)
 numClasses(int)
+normalizeScale(int) normalize the data in [-normalizeScale, normalizeScale]
 '''
-def test(dataSet, testDataSet, k, numFeatures, numClasses, categoricalFeaturesInfo):
-	result = [singleClassify(dataSet, data, k, numFeatures, numClasses, categoricalFeaturesInfo) == data[-1] for data in testDataSet]
+def test(dataSet, testDataSet, k, numFeatures, numClasses, categoricalFeaturesInfo, normalizeScale):
+	result = [singleClassify(dataSet, data, k, numFeatures, numClasses, categoricalFeaturesInfo, normalizeScale) == data[-1] for data in testDataSet]
 	cnt = 0
 	for re in result:
 		if(not re):
@@ -37,8 +38,9 @@ testData(list) [val1, val2, val3, ..., class] -1 for unknown class
 k(int)
 numFeatures(int)
 numClasses(int)
+normalizeScale(int) normalize the data in [-normalizeScale, normalizeScale]
 '''
-def singleClassify(dataSet, testData, k, numFeatures, numClasses, categoricalFeaturesInfo):
+def singleClassify(dataSet, testData, k, numFeatures, numClasses, categoricalFeaturesInfo, normalizeScale):
 	n = len(dataSet)
 	if(k > n):
 		print('Bad k!')
@@ -59,12 +61,34 @@ def singleClassify(dataSet, testData, k, numFeatures, numClasses, categoricalFea
 			minVal = min(featureVal)
 			interval = maxVal - minVal
 			if(interval != 0):
-				normalized = [(x - (abs(x) / x) * minVal) / interval for x in featureVal]
-				normalizedTestData[i] = (testData[i] - minVal) / interval
+				normalized = []
+				for x in featureVal:
+					if(x != 0):
+						sign = abs(x) / x
+					else:
+						sign = 1.0
+				normalized.append(normalizeScale * (x - sign * minVal) / interval)
+				x = testData[i]
+				if(x != 0):
+					sign = abs(x) / x
+				else:
+					sign = 1.0
+				normalizedTestData[i] = normalizeScale * (x - sign * minVal) / interval
 			else:
-				#Should this feature be ignored? After all, it's useless
-				normalized = [1.0 for x in featureVal]
-				normalizedTestData[i] = 1.0
+				normalized = []
+				for x in featureVal:
+					if(x != 0):
+						val = abs(x) / x
+					else:
+						val = 0.0
+				normalized.append(normalizeScale * val)
+				x = testData[i]
+				if(x != 0):
+					val = abs(x) / x
+				else:
+					val = 0.0
+				normalizedTestData[i] = normalizeScale * val
+
 			for j in range(n):
 				normalizedDataSet[j].append(normalized[j])
 

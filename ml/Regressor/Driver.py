@@ -25,8 +25,8 @@ else:
 		for data in rawData:
 			d = [float(x) for x in data]
 			dataSet.append(d)
-	for data in dataSet:
-		print(data)
+
 	if(regressor == 'LinearRegression'):
-		print(LinearRegression.LinearRegression.train([1, 0], [0, 1]))
-		
+		#LinearRegression.LinearRegression.train(dataSet[1:len(dataSet)], 5, [0.0, 0.0, 0.0, 0.0, 0.0, 0.0], 100, 0.01)
+		model = LinearRegression.LinearRegression.train(dataSet[1:len(dataSet)], 5, [0.0, 0.0, 0.0, 0.0, 0.0, 0.0], 100, 0.01, 10)
+		model.printModel()
