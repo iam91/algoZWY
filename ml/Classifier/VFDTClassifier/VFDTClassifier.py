@@ -1,0 +1,67 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+
+' DecisionTreeClassifier '
+
+__author__ = 'zwy'
+
+'''
+Continuous features produce binary splits.
+'''
+
+import math
+import VFDTClassifier.Impurity
+import VFDTClassifier.Node
+
+class VFDT(object):
+	def __init__(self, gracePeriod, numOfClasses, categoricalFeaturesInfo):
+		self.__gracePeriod = gracePeriod
+		self.__root = None
+		self.__numOfClasses = numOfClasses
+		self.__categoricalFeaturesInfo = categoricalFeaturesInfo
+
+
+	def returnModel(self):
+		return self.__root
+
+
+	def train(self, instance):
+		if(self.__root == None):
+			self.__root = VFDTClassifier.Node.LearningNode(1, self.__numOfClasses, True, self.__categoricalFeaturesInfo)
+			self.__root.updateNode(instance, self.__categoricalFeaturesInfo)
+		else:
+			nodeType = self.__root.getNodeType()
+			if(nodeType == 'leaf'):
+				instanceLeaf = self.__leafForInstance(instance, self.__root)
+				if(instanceLeaf.getStatus()):
+					instanceLeaf.updateNode(instance, self.__categoricalFeaturesInfo)
+					if(instanceLeaf.getNumOfInstancesSinceLastTry() > self.__gracePeriod):
+						# try split
+						pass
+				else:
+					pass
+			elif(nodeType == 'split'):
+				pass
+
+
+	def __computeHoeffdingBound(self, r, confidence, weight):
+		return math.sqrt((r * r * math.log(1.0 / confidence)) / (2 * weight))
+
+
+	def __leafForInstance(self, instance, node):
+		if(node.getNodeType() == 'leaf'):
+			return node
+		elif(node.getNodeType() == 'split'):
+			split = node.getSplit()
+			splitFeature = split[0]
+			splitPoints = split[1]
+			numOfSplitPoints = len(splitPoints)
+
+			cnt = 0
+			for splitPoint in splitPoints:
+				if(data[splitFeature] < splitPoint):
+					return self.__leafForInstance(instance, node.getChildren()[cnt])
+				elif(cnt >= numOfSplitPoints - 1):
+					return self.__leafForInstance(instance, node.getChildren()[cnt + 1])
+				cnt += 1
+		

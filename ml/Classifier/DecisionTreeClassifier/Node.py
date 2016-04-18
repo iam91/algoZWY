@@ -7,6 +7,9 @@ __author__ = 'zwy'
 
 # base node
 class Node(object):
+	'''
+	nodeType: 'split' or 'leaf'
+	'''
 	def __init__(self, nodeType, depth):
 		self.__nodeType = nodeType
 		self.__depth = depth
