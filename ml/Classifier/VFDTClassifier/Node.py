@@ -74,3 +74,6 @@ class LearningNode(Node):
 
 	def getNumOfInstancesSinceLastTry(self):
 		return self.__numOfInstancesSinceLastTry
+
+	def resetNumOfInstancesSinceLastTry(self):
+		self.__numOfInstancesSinceLastTry = 0

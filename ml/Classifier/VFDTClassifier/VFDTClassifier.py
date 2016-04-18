@@ -36,8 +36,10 @@ class VFDT(object):
 				if(instanceLeaf.getStatus()):
 					instanceLeaf.updateNode(instance, self.__categoricalFeaturesInfo)
 					if(instanceLeaf.getNumOfInstancesSinceLastTry() > self.__gracePeriod):
-						# try split
-						pass
+						
+						# TODO: try split
+
+						instanceLeaf.resetNumOfInstancesSinceLastTry()
 				else:
 					pass
 			elif(nodeType == 'split'):
@@ -64,4 +66,8 @@ class VFDT(object):
 				elif(cnt >= numOfSplitPoints - 1):
 					return self.__leafForInstance(instance, node.getChildren()[cnt + 1])
 				cnt += 1
+
+
+	def __trySplit(self, node):
+		pass
 		
