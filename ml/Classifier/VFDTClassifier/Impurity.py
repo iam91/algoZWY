@@ -6,22 +6,18 @@
 __author__ = 'zwy'
 
 import math
-from functools import reduce
-
 
 def gini(classVec, numClasses):
 	pass
 
 
 '''
-classVec(list) a list of class labels of the dataset
+classVec(list) a list of number of different class labels
 numClasses(int) the number of different classes
 '''
 def entropy(classVec, numClasses):
-	cnt = [0 for x in range(numClasses)]
-	tot = len(classVec)
-	for label in classVec:
-		cnt[label] += 1
+	cnt = [1 * x for x in classVec]
+	tot = sum(cnt)
 		
 	entropy = []
 	for x in cnt:
@@ -31,5 +27,5 @@ def entropy(classVec, numClasses):
 			p = x / tot
 			entropy.append(- p * math.log(p))
 
-	return reduce(lambda x, y: x + y, entropy)
+	return sum(entropy)
 	

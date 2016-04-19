@@ -6,7 +6,6 @@
 __author__ = 'zwy'
 
 import math
-from functools import reduce
 
 
 def gini(classVec, numClasses):
@@ -31,5 +30,5 @@ def entropy(classVec, numClasses):
 			p = x / tot
 			entropy.append(- p * math.log(p))
 
-	return reduce(lambda x, y: x + y, entropy)
+	return sum(entropy)
 	

@@ -5,6 +5,8 @@
 
 __author__ = 'zwy'
 
+import VFDTClassifier.Impurity
+
 # base node
 class Node(object):
 	'''
@@ -51,6 +53,7 @@ class LearningNode(Node):
 		self.__statistics = {}
 		self.__isActive = isActive
 		self.__numOfInstancesSinceLastTry = 0
+		self.__numOfInstancesFromBeginning = 0
 		for feat in categoricalFeaturesInfo:
 			self.__statistics[feat] = [[0 for x in range(numOfClasses)] for x in range(categoricalFeaturesInfo[feat])]
 
@@ -65,15 +68,69 @@ class LearningNode(Node):
 
 	def updateNode(self, instance, categoricalFeaturesInfo):
 		classLabel = instance[-1]
-		featureVec = [x for x in categoricalFeaturesInfo]
-		for feat in featureVec:
+		featureIndexVec = [x for x in categoricalFeaturesInfo]
+		for feat in featureIndexVec:
 			self.__statistics[feat][instance[feat]][classLabel] += 1
 
-		self.__numOfInstancesSinceLastTry += 1
+		self.__numOfInstancesFromBeginning += 1
 
 
 	def getNumOfInstancesSinceLastTry(self):
 		return self.__numOfInstancesSinceLastTry
 
+
 	def resetNumOfInstancesSinceLastTry(self):
-		self.__numOfInstancesSinceLastTry = 0
+		self.__numOfInstancesSinceLastTry = self.__numOfInstancesFromBeginning
+
+
+	def getNumOfInstancesFromBeginning(self):
+		return self.__numOfInstancesFromBeginning
+
+
+	def trySplit(self, 
+		categoricalFeaturesInfo, 
+		numOfClasses, 
+		hoeffdingBountConfidence, 
+		hoeffdingTieThreshold):
+		splitCandidates = []
+		numOfDiscreteFeatures = len(categoricalFeaturesInfo)
+		totClassCnt = [0 for x in range(numOfDiscreteClass)]
+		for feat in categoricalFeaturesInfo:
+			numOfFeatureValue = categoricalFeaturesInfo[feat]
+			postImpurity = 0.0
+			for i in range(numOfFeatureValue):
+				classVec = self.__statistics[feat][i]
+
+				for j in range(numOfDiscreteClass):
+					totClassCnt[j] += classVec[j]
+
+				featureValueWeight = sum(classVec)
+				postImpurity += (featureValueWeight 
+					/ self.__numOfInstancesFromBeginning) * Impurity.entropy(classVec, numOfClasses)
+
+			splitCandidates.append((feat, postImpurity))
+
+		preImpurity = Impurity.entropy(totClassCnt, numOfClasses)
+		splitCandidatesInfoGains = [(x[0], preImpurity - x[1]) for x in splitCandidates]
+		splitCandidatesInfoGains.sort(key = lambda x: x[1], reverse = True)
+
+		best = splitCandidatesInfoGains[0]
+		secondBest = splitCandidatesInfoGains[1]
+
+		infoGainRange = math.log(numOfClasses)
+		hoeffdingBound = self.__computeHoeffdingBound(infoGainRange, 
+			hoeffdingBountConfidence, self.__numOfInstancesFromBeginning)
+
+		if((best[1] - secondBest[1]) > hoeffdingBound 
+			|| hoeffdingBound < hoeffdingTieThreshold):
+			
+
+
+	def __computeHoeffdingBound(self, r, confidence, weight):
+		return math.sqrt((r * r * math.log(1.0 / confidence)) / (2 * weight))
+
+
+
+				
+
+		

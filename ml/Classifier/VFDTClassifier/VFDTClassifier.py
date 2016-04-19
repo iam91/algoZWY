@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-' DecisionTreeClassifier '
+' VFDTClassifier '
 
 __author__ = 'zwy'
 
 '''
-Continuous features produce binary splits.
+Implement discrete features
 '''
 
 import math
@@ -14,10 +14,17 @@ import VFDTClassifier.Impurity
 import VFDTClassifier.Node
 
 class VFDT(object):
-	def __init__(self, gracePeriod, numOfClasses, categoricalFeaturesInfo):
+	def __init__(self, 
+		gracePeriod, 
+		numOfClasses, 
+		hoeffdingBoundConfidence,
+		hoeffdingTieThreshold, 
+		categoricalFeaturesInfo):
 		self.__gracePeriod = gracePeriod
 		self.__root = None
 		self.__numOfClasses = numOfClasses
+		self.__hoeffdingBoundConfidence = hoeffdingBoundConfidence
+		self.__hoeffdingTieThreshold = hoeffdingTieThreshold
 		self.__categoricalFeaturesInfo = categoricalFeaturesInfo
 
 
@@ -35,7 +42,8 @@ class VFDT(object):
 				instanceLeaf = self.__leafForInstance(instance, self.__root)
 				if(instanceLeaf.getStatus()):
 					instanceLeaf.updateNode(instance, self.__categoricalFeaturesInfo)
-					if(instanceLeaf.getNumOfInstancesSinceLastTry() > self.__gracePeriod):
+					if((instanceLeaf.getNumOfInstancesFromBeginning() - instanceLeaf.getNumOfInstancesSinceLastTry()) 
+						> self.__gracePeriod):
 						
 						# TODO: try split
 
@@ -45,9 +53,6 @@ class VFDT(object):
 			elif(nodeType == 'split'):
 				pass
 
-
-	def __computeHoeffdingBound(self, r, confidence, weight):
-		return math.sqrt((r * r * math.log(1.0 / confidence)) / (2 * weight))
 
 
 	def __leafForInstance(self, instance, node):
