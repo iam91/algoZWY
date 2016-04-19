@@ -37,22 +37,19 @@ class VFDT(object):
 			self.__root = VFDTClassifier.Node.LearningNode(1, self.__numOfClasses, True, self.__categoricalFeaturesInfo)
 			self.__root.updateNode(instance, self.__categoricalFeaturesInfo)
 		else:
-			nodeType = self.__root.getNodeType()
-			if(nodeType == 'leaf'):
-				instanceLeaf = self.__leafForInstance(instance, self.__root)
-				if(instanceLeaf.getStatus()):
-					instanceLeaf.updateNode(instance, self.__categoricalFeaturesInfo)
-					if((instanceLeaf.getNumOfInstancesFromBeginning() - instanceLeaf.getNumOfInstancesSinceLastTry()) 
-						> self.__gracePeriod):
+			instanceLeaf = self.__leafForInstance(instance, self.__root)
+			if(instanceLeaf.getStatus()):
+				instanceLeaf.updateNode(instance, self.__categoricalFeaturesInfo)
+				if((instanceLeaf.getNumOfInstancesFromBeginning() - instanceLeaf.getNumOfInstancesSinceLastTry()) 
+					> self.__gracePeriod):
 						
-						# TODO: try split
-
-						instanceLeaf.resetNumOfInstancesSinceLastTry()
-				else:
-					pass
-			elif(nodeType == 'split'):
+					# TODO: try split
+					tryResultNode = self.__trySplit(instanceLeaf)
+					fatherBranch = instanceLeaf.getFatherBranch()
+					fatherBranch[0].setChild(fatherBranch[1], tryResultNode)
+					instanceLeaf.resetNumOfInstancesSinceLastTry()
+			else:
 				pass
-
 
 
 	def __leafForInstance(self, instance, node):
@@ -74,5 +71,9 @@ class VFDT(object):
 
 
 	def __trySplit(self, node):
-		pass
+		return node.trySplit(
+			self.__categoricalFeaturesInfo,
+			self.__numOfClasses,
+			self.__hoeffdingBoundConfidence,
+			self.__hoeffdingTieThreshold)
 		
