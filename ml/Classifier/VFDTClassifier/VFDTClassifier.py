@@ -12,6 +12,7 @@ Implement discrete features
 import math
 import VFDTClassifier.Impurity
 import VFDTClassifier.Node
+import VFDTClassifier.VFDTModel
 
 class VFDT(object):
 	def __init__(self, 
@@ -28,8 +29,8 @@ class VFDT(object):
 		self.__categoricalFeaturesInfo = categoricalFeaturesInfo
 
 
-	def returnModel(self):
-		return self.__root
+	def getModel(self):
+		return VFDTClassifier.VFDTModel.VFDTModel(self.__root)
 
 
 	def train(self, instance):
@@ -41,7 +42,7 @@ class VFDT(object):
 			if(instanceLeaf.getStatus()):
 				instanceLeaf.updateNode(instance, self.__categoricalFeaturesInfo)
 				if((instanceLeaf.getNumOfInstancesFromBeginning() - instanceLeaf.getNumOfInstancesSinceLastTry()) 
-					> self.__gracePeriod):
+					>= self.__gracePeriod):
 						
 					# TODO: try split
 					tryResultNode = self.__trySplit(instanceLeaf)
@@ -74,9 +75,8 @@ class VFDT(object):
 
 
 	def __trySplit(self, node):
-		return node.trySplit(
-			self.__categoricalFeaturesInfo,
-			self.__numOfClasses,
-			self.__hoeffdingBoundConfidence,
+		return node.trySplit( 
+			self.__categoricalFeaturesInfo, 
+			self.__hoeffdingBoundConfidence, 
 			self.__hoeffdingTieThreshold)
 		

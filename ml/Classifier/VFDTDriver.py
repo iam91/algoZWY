@@ -58,3 +58,6 @@ else:
 	tree = VFDTClassifier.VFDTClassifier.VFDT(3, 3, 0.0000001, 0.05, {0: 5, 1: 5, 2: 5, 3: 5})
 	for data in dataSet:
 		tree.train(data)
+
+	model = tree.getModel() 
+	model.test(dataSet)

@@ -5,6 +5,7 @@
 
 __author__ = 'zwy'
 
+import math
 import VFDTClassifier.Impurity
 
 # base node
@@ -63,13 +64,25 @@ class LearningNode(Node):
 		# for discrete features
 		# self.__fatherBranch is a tuple that takes the form: (fatherNode, branchIndex)
 		self.__fatherBranch = fatherBranch
+		self.__numOfClasses = numOfClasses
 		self.__numOfInstancesSinceLastTry = 0
 		self.__numOfInstancesFromBeginning = 0
+		self.__classesCnt = [0 for x in range(numOfClasses)]
 		for feat in categoricalFeaturesInfo:
 			self.__statistics[feat] = [[0 for x in range(numOfClasses)] for x in range(categoricalFeaturesInfo[feat])]
 
 
-	def getFatherBranch():
+	def getMajorityClass(self):
+		maxCnt = self.__classesCnt[0]
+		maxInd = 0
+		for i in range(self.__numOfClasses):
+			if(self.__classesCnt[i] > maxCnt):
+				maxCnt = self.__classesCnt[i]
+				maxInd = i
+		return maxInd
+
+
+	def getFatherBranch(self):
 		return self.__fatherBranch
 
 
@@ -88,6 +101,7 @@ class LearningNode(Node):
 			self.__statistics[feat][instance[feat]][classLabel] += 1
 
 		self.__numOfInstancesFromBeginning += 1
+		self.__classesCnt[classLabel] += 1
 
 
 	def getNumOfInstancesSinceLastTry(self):
@@ -104,36 +118,35 @@ class LearningNode(Node):
 
 	def trySplit(self, 
 		categoricalFeaturesInfo, 
-		numOfClasses, 
 		hoeffdingBoundConfidence, 
 		hoeffdingTieThreshold):
 		splitCandidates = []
 		numOfDiscreteFeatures = len(categoricalFeaturesInfo)
 
-		totClassCnt = [0 for x in range(numOfDiscreteClass)]
+		totClassCnt = [0 for x in range(self.__numOfClasses)]
 		for feat in categoricalFeaturesInfo:
 			numOfFeatureValue = categoricalFeaturesInfo[feat]
 			postImpurity = 0.0
 			for i in range(numOfFeatureValue):
 				classVec = self.__statistics[feat][i]
 
-				for j in range(numOfDiscreteClass):
+				for j in range(self.__numOfClasses):
 					totClassCnt[j] += classVec[j]
 
 				featureValueWeight = sum(classVec)
 				postImpurity += (featureValueWeight 
-					/ self.__numOfInstancesFromBeginning) * Impurity.entropy(classVec, numOfClasses)
+					/ self.__numOfInstancesFromBeginning) * VFDTClassifier.Impurity.entropy(classVec, self.__numOfClasses)
 
 			splitCandidates.append((feat, postImpurity))
 
-		preImpurity = Impurity.entropy(totClassCnt, numOfClasses)
+		preImpurity = VFDTClassifier.Impurity.entropy(totClassCnt, self.__numOfClasses)
 		splitCandidatesInfoGains = [(x[0], preImpurity - x[1]) for x in splitCandidates]
 		splitCandidatesInfoGains.sort(key = lambda x: x[1], reverse = True)
 
 		best = splitCandidatesInfoGains[0]
 		secondBest = splitCandidatesInfoGains[1]
 
-		infoGainRange = math.log(numOfClasses)
+		infoGainRange = math.log(self.__numOfClasses)
 		hoeffdingBound = self.__computeHoeffdingBound(infoGainRange, 
 			hoeffdingBoundConfidence, self.__numOfInstancesFromBeginning)
 
@@ -146,7 +159,7 @@ class LearningNode(Node):
 			splitNode = VFDTClassifier.Node.SplitNode(split, children, self.__depth)
 
 			children = [VFDTClassifier.Node.LearningNode(self.__depth + 1, 
-				numOfClasses, 
+				self.__numOfClasses, 
 				True, 
 				(splitNode, x),
 				categoricalFeaturesInfo) for x in splitPoints]
