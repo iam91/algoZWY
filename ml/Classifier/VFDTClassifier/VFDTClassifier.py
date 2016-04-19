@@ -67,10 +67,8 @@ class VFDT(object):
 
 			cnt = 0
 			for splitPoint in splitPoints:
-				if(data[splitFeature] < splitPoint):
+				if(instance[splitFeature] == splitPoint):
 					return self.__leafForInstance(instance, node.getChildren()[cnt])
-				elif(cnt >= numOfSplitPoints - 1):
-					return self.__leafForInstance(instance, node.getChildren()[cnt + 1])
 				cnt += 1
 
 

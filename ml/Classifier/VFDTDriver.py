@@ -53,11 +53,19 @@ else:
 		for line in rawData:
 			data = [float(val) for val in line]
 			dataSet.append(data)
+	elif(fileDir.endswith("nursery.csv")):
+		# format nursery
+		dataSet = []
+		for line in rawData:
+			data = [int(val) for val in line]
+			dataSet.append(data)
 	
 	# for discreate features, their values should start from 0
-	tree = VFDTClassifier.VFDTClassifier.VFDT(3, 3, 0.0000001, 0.05, {0: 5, 1: 5, 2: 5, 3: 5})
+	mm = {0: 3, 1: 5, 2: 4, 3: 4, 4: 3, 5: 2, 6: 3, 7: 3}
+	tree = VFDTClassifier.VFDTClassifier.VFDT(200, 5, 0.0001, 0.05, mm)
 	for data in dataSet:
 		tree.train(data)
 
 	model = tree.getModel() 
+	#model.printModel()
 	model.test(dataSet)

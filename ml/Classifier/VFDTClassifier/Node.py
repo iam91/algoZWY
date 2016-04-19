@@ -39,7 +39,7 @@ class SplitNode(Node):
 
 
 	def getChildren(self):
-		return self.__Children
+		return self.__children
 
 
 	def setChild(self, index, child):
@@ -123,15 +123,11 @@ class LearningNode(Node):
 		splitCandidates = []
 		numOfDiscreteFeatures = len(categoricalFeaturesInfo)
 
-		totClassCnt = [0 for x in range(self.__numOfClasses)]
 		for feat in categoricalFeaturesInfo:
 			numOfFeatureValue = categoricalFeaturesInfo[feat]
 			postImpurity = 0.0
 			for i in range(numOfFeatureValue):
 				classVec = self.__statistics[feat][i]
-
-				for j in range(self.__numOfClasses):
-					totClassCnt[j] += classVec[j]
 
 				featureValueWeight = sum(classVec)
 				postImpurity += (featureValueWeight 
@@ -139,26 +135,26 @@ class LearningNode(Node):
 
 			splitCandidates.append((feat, postImpurity))
 
-		preImpurity = VFDTClassifier.Impurity.entropy(totClassCnt, self.__numOfClasses)
+		preImpurity = VFDTClassifier.Impurity.entropy(self.__classesCnt, self.__numOfClasses)
 		splitCandidatesInfoGains = [(x[0], preImpurity - x[1]) for x in splitCandidates]
 		splitCandidatesInfoGains.sort(key = lambda x: x[1], reverse = True)
-
+		#print(0, splitCandidatesInfoGains)
 		best = splitCandidatesInfoGains[0]
 		secondBest = splitCandidatesInfoGains[1]
 
 		infoGainRange = math.log(self.__numOfClasses)
 		hoeffdingBound = self.__computeHoeffdingBound(infoGainRange, 
 			hoeffdingBoundConfidence, self.__numOfInstancesFromBeginning)
-
+		print(2, best[1] - secondBest[1], hoeffdingBound)
 		if((best[1] - secondBest[1]) > hoeffdingBound or hoeffdingBound < hoeffdingTieThreshold):
 			splitFeature = best[0]
 			splitPoints = [x for x in range(categoricalFeaturesInfo[splitFeature])]
 
 			split = (splitFeature, splitPoints)
 
-			splitNode = VFDTClassifier.Node.SplitNode(split, children, self.__depth)
+			splitNode = VFDTClassifier.Node.SplitNode(split, self.getDepth())
 
-			children = [VFDTClassifier.Node.LearningNode(self.__depth + 1, 
+			children = [VFDTClassifier.Node.LearningNode(self.getDepth() + 1, 
 				self.__numOfClasses, 
 				True, 
 				(splitNode, x),
@@ -170,6 +166,7 @@ class LearningNode(Node):
 
 
 	def __computeHoeffdingBound(self, r, confidence, weight):
+		#print(1, r, confidence, weight, math.sqrt((r * r * math.log(1.0 / confidence)) / (2 * weight)))
 		return math.sqrt((r * r * math.log(1.0 / confidence)) / (2 * weight))
 
 

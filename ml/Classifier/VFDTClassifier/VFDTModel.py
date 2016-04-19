@@ -23,10 +23,8 @@ class VFDTModel(object):
 
 			cnt = 0
 			for splitPoint in splitPoints:
-				if(data[splitFeature] < splitPoint):
-					return self.__leafForInstance(instance, node.getChildren()[cnt])
-				elif(cnt >= numOfSplitPoints - 1):
-					return self.__leafForInstance(instance, node.getChildren()[cnt + 1])
+				if(instance[splitFeature] == splitPoint):
+					return self.__traverse(instance, node.getChildren()[cnt])
 				cnt += 1
 
 
@@ -45,5 +43,21 @@ class VFDTModel(object):
 		return leaf.getMajorityClass()
 
 
-	def printModel():
-		pass
+	def printModel(self):
+		self.__print(self.__root)
+
+
+	def __print(self, node):
+		if(node.getNodeType() == 'leaf'):
+			print(node.getDepth(), node.getMajorityClass())
+		elif(node.getNodeType() == 'split'):
+			print(node.getDepth(), node.getSplit())
+			split = node.getSplit()
+			splitFeature = split[0]
+			splitPoints = split[1]
+			numOfSplitPoints = len(splitPoints)
+
+			cnt = 0
+			for splitPoint in splitPoints:
+				self.__print(node.getChildren()[cnt])
+				cnt += 1
