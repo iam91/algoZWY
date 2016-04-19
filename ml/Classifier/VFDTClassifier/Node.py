@@ -116,6 +116,19 @@ class LearningNode(Node):
 		return self.__numOfInstancesFromBeginning
 
 
+	def inheritStatistics(self, oldStatistics, featIndex):
+		valIndex = 0
+		for val in oldStatistics:
+			labelIndex = 0
+			for label in val:
+				self.__statistics[featIndex][valIndex][labelIndex] = oldStatistics[valIndex][labelIndex]
+				self.__numOfInstancesSinceLastTry += oldStatistics[valIndex][labelIndex]
+				self.__numOfInstancesFromBeginning += oldStatistics[valIndex][labelIndex]
+				self.__classesCnt[labelIndex] += oldStatistics[valIndex][labelIndex]
+			labelIndex += 1
+		valIndex += 1
+
+
 	def trySplit(self, 
 		categoricalFeaturesInfo, 
 		hoeffdingBoundConfidence, 
@@ -145,20 +158,30 @@ class LearningNode(Node):
 		infoGainRange = math.log(self.__numOfClasses)
 		hoeffdingBound = self.__computeHoeffdingBound(infoGainRange, 
 			hoeffdingBoundConfidence, self.__numOfInstancesFromBeginning)
-		print(2, best[1] - secondBest[1], hoeffdingBound)
+		#print(2, best[1] - secondBest[1], hoeffdingBound)
 		if((best[1] - secondBest[1]) > hoeffdingBound or hoeffdingBound < hoeffdingTieThreshold):
 			splitFeature = best[0]
 			splitPoints = [x for x in range(categoricalFeaturesInfo[splitFeature])]
 
 			split = (splitFeature, splitPoints)
 
+			# create a split node waiting for seting children
 			splitNode = VFDTClassifier.Node.SplitNode(split, self.getDepth())
 
+			# create children
 			children = [VFDTClassifier.Node.LearningNode(self.getDepth() + 1, 
 				self.__numOfClasses, 
 				True, 
 				(splitNode, x),
 				categoricalFeaturesInfo) for x in splitPoints]
+
+			# update the statistics of children
+			featIndex = 0
+			for child in children:
+				child.inheritStatistics(self.__statistics[featIndex], featIndex)
+				featIndex += 1
+
+			# attach children to their father(the newly created split node)
 			splitNode.setChildren(children)
 			return splitNode
 		else:
@@ -170,7 +193,26 @@ class LearningNode(Node):
 		return math.sqrt((r * r * math.log(1.0 / confidence)) / (2 * weight))
 
 
+'''
+# update the statistics of children
 
+featIndex = 0
+for child in children:
+child.inheritStatistics(self.__statistics[featIndex], featIndex)
+featIndex += 1
+'''
 				
-
+'''
+def inheritStatistics(self, oldStatistics, featIndex):
+valIndex = 0
+for val in oldStatistics:
+labelIndex = 0
+for label in val:
+self.__statistics[featIndex][valIndex][labelIndex] = oldStatistics[valIndex][labelIndex]
+self.__numOfInstancesSinceLastTry += oldStatistics[valIndex][labelIndex]
+self.__numOfInstancesFromBeginning += oldStatistics[valIndex][labelIndex]
+self.__classesCnt[labelIndex] += oldStatistics[valIndex][labelIndex]
+labelIndex += 1
+valIndex += 1
+'''
 		
