@@ -34,7 +34,7 @@ class VFDT(object):
 
 	def train(self, instance):
 		if(self.__root == None):
-			self.__root = VFDTClassifier.Node.LearningNode(1, self.__numOfClasses, True, self.__categoricalFeaturesInfo)
+			self.__root = VFDTClassifier.Node.LearningNode(1, self.__numOfClasses, True, None, self.__categoricalFeaturesInfo)
 			self.__root.updateNode(instance, self.__categoricalFeaturesInfo)
 		else:
 			instanceLeaf = self.__leafForInstance(instance, self.__root)
@@ -46,7 +46,10 @@ class VFDT(object):
 					# TODO: try split
 					tryResultNode = self.__trySplit(instanceLeaf)
 					fatherBranch = instanceLeaf.getFatherBranch()
-					fatherBranch[0].setChild(fatherBranch[1], tryResultNode)
+					if(fatherBranch == None):
+						self.__root = tryResultNode
+					else:
+						fatherBranch[0].setChild(fatherBranch[1], tryResultNode)
 					instanceLeaf.resetNumOfInstancesSinceLastTry()
 			else:
 				pass

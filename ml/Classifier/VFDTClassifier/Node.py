@@ -137,7 +137,7 @@ class LearningNode(Node):
 		hoeffdingBound = self.__computeHoeffdingBound(infoGainRange, 
 			hoeffdingBoundConfidence, self.__numOfInstancesFromBeginning)
 
-		if((best[1] - secondBest[1]) > hoeffdingBound || hoeffdingBound < hoeffdingTieThreshold):
+		if((best[1] - secondBest[1]) > hoeffdingBound or hoeffdingBound < hoeffdingTieThreshold):
 			splitFeature = best[0]
 			splitPoints = [x for x in range(categoricalFeaturesInfo[splitFeature])]
 
@@ -148,7 +148,7 @@ class LearningNode(Node):
 			children = [VFDTClassifier.Node.LearningNode(self.__depth + 1, 
 				numOfClasses, 
 				True, 
-				(splitNode, x)
+				(splitNode, x),
 				categoricalFeaturesInfo) for x in splitPoints]
 			splitNode.setChildren(children)
 			return splitNode

@@ -55,6 +55,6 @@ else:
 			dataSet.append(data)
 	
 	# for discreate features, their values should start from 0
-	tree = VFDTClassifier.VFDTClassifier.VFDT(3, 3, {0: 5, 1: 5, 2: 5, 3: 5})
+	tree = VFDTClassifier.VFDTClassifier.VFDT(3, 3, 0.0000001, 0.05, {0: 5, 1: 5, 2: 5, 3: 5})
 	for data in dataSet:
 		tree.train(data)
