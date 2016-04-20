@@ -44,7 +44,6 @@ class VFDT(object):
 				if((instanceLeaf.getNumOfInstancesFromBeginning() - instanceLeaf.getNumOfInstancesSinceLastTry()) 
 					>= self.__gracePeriod):
 						
-					# TODO: try split
 					tryResultNode = self.__trySplit(instanceLeaf)
 					fatherBranch = instanceLeaf.getFatherBranch()
 					if(fatherBranch == None):
