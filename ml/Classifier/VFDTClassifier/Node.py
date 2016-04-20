@@ -158,7 +158,7 @@ class LearningNode(Node):
 		infoGainRange = math.log(self.__numOfClasses)
 		hoeffdingBound = self.__computeHoeffdingBound(infoGainRange, 
 			hoeffdingBoundConfidence, self.__numOfInstancesFromBeginning)
-		#print(2, best[1] - secondBest[1], hoeffdingBound)
+		print(2, best[1] - secondBest[1], hoeffdingBound)
 		if((best[1] - secondBest[1]) > hoeffdingBound or hoeffdingBound < hoeffdingTieThreshold):
 			splitFeature = best[0]
 			splitPoints = [x for x in range(categoricalFeaturesInfo[splitFeature])]
@@ -175,12 +175,7 @@ class LearningNode(Node):
 				(splitNode, x),
 				categoricalFeaturesInfo) for x in splitPoints]
 
-			# update the statistics of children
-			featIndex = 0
-			for child in children:
-				child.inheritStatistics(self.__statistics[featIndex], featIndex)
-				featIndex += 1
-
+			
 			# attach children to their father(the newly created split node)
 			splitNode.setChildren(children)
 			return splitNode

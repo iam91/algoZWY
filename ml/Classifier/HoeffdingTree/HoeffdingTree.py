@@ -46,13 +46,14 @@ class HoeffdingTreeClassifier(object):
 				instanceLeaf.updateNode(instance)
 				if((instanceLeaf.getNumOfInstancesFromBeginning() - instanceLeaf.getNumOfInstancesSinceLastTry()) 
 					>= self.__gracePeriod):
-					tryResultNode = self.__trySplit(instanceLeaf)
+					####### do not return splitNode but instanceLeaf it self
+					tryResultNode = (instanceLeaf.trySplit())
+					print('oops')
 					fatherBranch = instanceLeaf.getFatherBranch()
 					if(fatherBranch == None):
 						self.__root = tryResultNode
 					else:
 						fatherBranch.getFatherPointer().setChild(fatherBranch.getChildIndex(), tryResultNode)
-					instanceLeaf.resetNumOfInstancesSinceLastTry()
 			else:
 				pass
 
@@ -74,7 +75,3 @@ class HoeffdingTreeClassifier(object):
 			elif(featureType == 'nominal'):
 				for splitPoint in splitPoints:
 					return self.__leafForInstance(instance, node.getChildren()[splitPoint])
-
-
-	def __trySplit(self, node):
-		return node.trySplit()

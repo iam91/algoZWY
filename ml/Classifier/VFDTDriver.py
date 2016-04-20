@@ -63,8 +63,8 @@ else:
 	
 	# for discreate features, their values should start from 0
 	mm = {0: 3, 1: 5, 2: 4, 3: 4, 4: 3, 5: 2, 6: 3, 7: 3}
-	tree = VFDTClassifier.VFDTClassifier.VFDT(200, 5, 0.000001, 0.05, mm)
-	for data in dataSet:
+	tree = VFDTClassifier.VFDTClassifier.VFDT(5, 5, 0.000001, 0.05, mm)
+	for data in dataSet[0:200]:
 		tree.train(data)
 
 	model = tree.getModel() 
@@ -72,8 +72,8 @@ else:
 	model.test(dataSet)
 
 	print('=====================================')
-	tree = HoeffdingTree.HoeffdingTree.HoeffdingTreeClassifier(200, 5, 0.000001, 0.05, mm)
-	for data in dataSet:
+	tree = HoeffdingTree.HoeffdingTree.HoeffdingTreeClassifier(5, 5, 0.000001, 0.05, mm)
+	for data in dataSet[0:200]:
 		tree.train(data)
 
 	model = tree.getModel() 

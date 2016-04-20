@@ -87,6 +87,7 @@ class LearningNode(Node):
 			value = instance[feat]
 			self.__statistics[feat].update(value, classLabel)
 		self.__classesCnt[classLabel] += 1
+		self.__numOfInstancesFromBeginning += 1
 
 
 	def getNumOfInstancesFromBeginning(self):
@@ -113,7 +114,7 @@ class LearningNode(Node):
 				#nominal feature
 				stat = self.__statistics[feat].getStatistics()
 				postImpurity = 0.0
-				totCnt = stat.getTotalCnt()
+				totCnt = self.__statistics[feat].getTotalCnt()
 				for i in range(numOfValues):
 					classCntVec = stat[i]
 					currCnt = sum(classCntVec)
@@ -124,7 +125,7 @@ class LearningNode(Node):
 					list(range(numOfValues)), 
 					'nominal', 
 					currInfoGain)
-				splitCandidates.append(currSplit)
+			splitCandidates.append(currSplit)
 
 		splitCandidates.sort(key = lambda x: x.getInfoGain(), reverse = True)
 
@@ -135,16 +136,16 @@ class LearningNode(Node):
 		hoeffdingBound = self.__computeHoeffdingBound(infoGainRange, 
 			self.__hoeffdingBoundConfidence, 
 			self.__numOfInstancesFromBeginning)
-
-		if((best.getInfoGain - secondBest.getInfoGain) > hoeffdingBound
-			or hoeffdingBound < hoeffdingTieThreshold):
+		###
+		print(2, best.getInfoGain() - secondBest.getInfoGain(), hoeffdingBound)
+		if((best.getInfoGain() - secondBest.getInfoGain()) > hoeffdingBound or hoeffdingBound < self.__hoeffdingTieThreshold):
 			split = best
 			numOfChildren = split.getNumOfSplitBins()
-
-			# create a split node waiting for seting children
+			print('ooops')
+			# create a split node waiting for setting children
 			splitNode = HoeffdingTree.Node.SplitNode(split, self.getDepth())
 
-			children = [HoeffdingTree.Node.LearningNode(self.getDepth, 
+			children = [HoeffdingTree.Node.LearningNode(self.getDepth() + 1, 
 				self.__numOfClasses, 
 				self.__numOfFeatures, 
 				True, 
@@ -155,8 +156,11 @@ class LearningNode(Node):
 
 			# attach children to their father(the newly created split node)
 			splitNode.setChildren(children)
+			self.__numOfInstancesSinceLastTry = self.__numOfInstancesFromBeginning
+			print('before returning splitNode')
 			return splitNode
 		else:
+			print('before returning self')
 			return self
 
 

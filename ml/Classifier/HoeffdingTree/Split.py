@@ -37,7 +37,7 @@ class Split(object):
 
 
 class Branch(object):
-	def __init__(self, fatherPoiner, childIndex):
+	def __init__(self, fatherPointer, childIndex):
 		self.__fatherPointer = fatherPointer
 		self.__childIndex = childIndex
 
