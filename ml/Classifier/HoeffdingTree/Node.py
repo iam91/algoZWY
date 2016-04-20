@@ -5,7 +5,9 @@
 
 __author__ = 'zwy'
 
+import math
 import HoeffdingTree.Utils
+import HoeffdingTree.Split
 
 # base node
 class Node(object):
@@ -43,6 +45,7 @@ class LearningNode(Node):
 		self.__featureInfo = featureInfo
 		self.__hoeffdingBoundConfidence = hoeffdingBoundConfidence
 		self.__hoeffdingTieThreshold = hoeffdingTieThreshold
+		self.__classesCnt = [0 for x in range(self.__numOfClasses)]
 		self.__numOfInstancesSinceLastTry = 0
 		self.__numOfInstancesFromBeginning = 0
 		self.__statistics = {}
@@ -56,42 +59,130 @@ class LearningNode(Node):
 					= HoeffdingTree.Utils.NominalFeatureStatistics(numOfValues, self.__numOfClasses)
 
 
-		def getFatherBranch(self):
-			return self.__fatherBranch
+	def getMajorityClass(self):
+		maxCnt = self.__classesCnt[0]
+		maxInd = 0
+		for i in range(self.__numOfClasses):
+			if(self.__classesCnt[i] > maxCnt):
+				maxCnt = self.__classesCnt[i]
+				maxInd = i
+		return maxInd
 
 
-		def updateNode(self, instance):
-			classLabel = instance[-1]
-			for feat in self.__numOfFeatures:
-				value = instance[feat]
-				self.__statistics[feat].update(value, classLabel)
+	def getStatus(self):
+		return self.__isActive
 
 
-		def getNumOfInstancesFromBeginning(self):
-			return self.__numOfInstancesFromBeginning
+	def setStatus(self, isActive):
+		self.__isActive = isActive
 
 
-		def getNumOfInstancesSinceLastTry(self):
-			return self.__numOfInstancesSinceLastTry
+	def getFatherBranch(self):
+		return self.__fatherBranch
 
 
-		def resetNumOfInstancesSinceLastTry(self):
-			self.__numOfInstancesSinceLastTry = self.__numOfInstancesFromBeginning
+	def updateNode(self, instance):
+		classLabel = instance[-1]
+		for feat in self.__numOfFeatures:
+			value = instance[feat]
+			self.__statistics[feat].update(value, classLabel)
+		self.__classesCnt[classLabel] += 1
 
 
-		def trySplit(self):
-			pass
+	def getNumOfInstancesFromBeginning(self):
+		return self.__numOfInstancesFromBeginning
 
 
-class Branch(Oject):
-	def __init__(self, fatherPoiner, splitIndex):
-		self.__fatherPointer = fatherPointer
-		self.__splitIndex = splitIndex
-
-	
-	def getFatherPointer(self):
-		return self.__fatherPointer
+	def getNumOfInstancesSinceLastTry(self):
+		return self.__numOfInstancesSinceLastTry
 
 
-	def getSplitIndex(self):
-		return self.__splitIndex
+	def resetNumOfInstancesSinceLastTry(self):
+		self.__numOfInstancesSinceLastTry = self.__numOfInstancesFromBeginning
+
+
+	def trySplit(self):
+		preImpurity = HoeffdingTree.Utils.entropy(self.__classesCnt)
+		splitCandidates = []
+		for feat in self.__featureInfo:
+			numOfValues = self.__featureInfo[feat]
+			if(numOfValues == 0):
+				#continuous feature
+				pass
+			elif(numOfValues > 0):
+				#nominal feature
+				stat = self.__statistics[feat].getStatistics()
+				postImpurity = 0.0
+				totCnt = stat.getTotalCnt()
+				for i in range(numOfValues):
+					classCntVec = stat[i]
+					currCnt = sum(classCntVec)
+					currImpurity = HoeffdingTree.Utils.entropy(classCntVec)
+					postImpurity += (currCnt / totCnt) * currImpurity
+				currInfoGain = preImpurity - postImpurity
+				currSplit = HoeffdingTree.Split.Split(feat, 
+					list(range(numOfValues)), 
+					'nominal', 
+					currInfoGain)
+				splitCandidates.append(currSplit)
+
+		splitCandidates.sort(key = lambda x: x.getInfoGain(), reverse = True)
+
+		best = splitCandidates[0]
+		secondBest = splitCandidates[1]
+
+		infoGainRange = math.log(self.__numOfClasses)
+		hoeffdingBound = self.__computeHoeffdingBound(infoGainRange, 
+			self.__hoeffdingBoundConfidence, 
+			self.__numOfInstancesFromBeginning)
+
+		if((best.getInfoGain - secondBest.getInfoGain) > hoeffdingBound
+			or hoeffdingBound < hoeffdingTieThreshold):
+			split = best
+			numOfChildren = split.getNumOfSplitBins()
+
+			# create a split node waiting for seting children
+			splitNode = HoeffdingTree.Node.SplitNode(split, self.getDepth())
+
+			children = [HoeffdingTree.Node.LearningNode(self.getDepth, 
+				self.__numOfClasses, 
+				self.__numOfFeatures, 
+				True, 
+				HoeffdingTree.Split.Branch(splitNode, x), 
+				self.__featureInfo, 
+				self.__hoeffdingBoundConfidence,
+				self.__hoeffdingTieThreshold) for x in range(numOfChildren)]
+
+			# attach children to their father(the newly created split node)
+			splitNode.setChildren(children)
+			return splitNode
+		else:
+			return self
+
+
+
+	def __computeHoeffdingBound(self, r, confidence, weight):
+		return math.sqrt((r * r * math.log(1.0 / confidence)) / (2 * weight))
+
+
+class SplitNode(Node):
+	def __init__(self, split, depth):
+		Node.__init__(self, 'split', depth)
+		self.__split = split
+		self.__children = None
+
+
+	def getSplit(self):
+		return self.__split
+
+
+	def getChildren(self):
+		return self.__children
+
+
+	def setChild(self, index, child):
+		self.__children[index] = child
+
+
+	def setChildren(self, children):
+		self.__children = children

@@ -11,8 +11,8 @@ import math
 classVec(list) a list of number of different class labels
 numClasses(int) the number of different classes
 '''
-def entropy(classVec, numClasses):
-	cnt = [1 * x for x in classVec]
+def entropy(classCntVec):
+	cnt = [1 * x for x in classCntVec]
 	tot = sum(cnt)
 	entropy = []
 	for x in cnt:
@@ -37,11 +37,17 @@ class Statistics(object):
 		pass
 
 
+	@abstractmethod
+	def getStatistics(self):
+		pass
+
+
 
 class NominalFeatureStatistics(Statistics):
 	def __init__(self, numOfValues, numOfClasses):
 		Statistics.__init__(self, 'nominal')
 		self.__numOfValues = numOfValues
+		# self.__statistics[featureVal][classLabel]
 		self.__statistics = [[0 for x in range(numOfClasses)] for y in range(numOfValues)]
 		self.__classCnt = [0 for x in range(numOfClasses)]
 		self.__totCnt = 0
@@ -53,6 +59,14 @@ class NominalFeatureStatistics(Statistics):
 		self.__totCnt += 1
 
 
+	def getStatistics(self):
+		return self.__statistics
+
+
+	def getTotalCnt(self):
+		return self.__totCnt
+
+
 class ContinuousFeatureStatistics(Statistics):
 	__VALSUM = 0
 	__VALSQSUM = 1
@@ -62,21 +76,25 @@ class ContinuousFeatureStatistics(Statistics):
 	def __init__(self, numOfClasses):
 		Statistics.__init__(self, 'continuous')
 		self.__numOfClasses = numOfClasses
-		self.__statistics = [(0.0, 0.0, 0.0, 0.0, 0) for x in range(self._numOfClasses)]
+		self.__baseStatistics = [(0.0, 0.0, 0.0, 0.0, 0) for x in range(self._numOfClasses)]
 
 
 	def update(self, value, classLabel):
-		if(self.statisitcs[classLabel][self.__CNT] == 0):
-			self.__statistics[classLabel][self.__MAXVAL] = value
-			self.__statistics[classLabel][self.__MinVAL] = value
+		if(self.__baseStatistics[classLabel][self.__CNT] == 0):
+			self.__baseStatistics[classLabel][self.__MAXVAL] = value
+			self.__baseStatistics[classLabel][self.__MinVAL] = value
 		else:
-			if(self.__statistics[classLabel][self.__MAXVAL] < value):
-				self.__statistics[classLabel][self.__MAXVAL] = value
-			if(self.__statistics[classLabel][self.__MinVAL] > value):
-				self.__statistics[classLabel][self.__MinVAL] = value
+			if(self.__baseStatistics[classLabel][self.__MAXVAL] < value):
+				self.__baseStatistics[classLabel][self.__MAXVAL] = value
+			if(self.__baseStatistics[classLabel][self.__MinVAL] > value):
+				self.__baseStatistics[classLabel][self.__MinVAL] = value
 
-		self.__statistics[classLabel][self.__CNT] += 1
-		self.__statistics[classLabel][self.__VALSUM] += value
-		self.__statistics[classLabel][self.__VALSQSUM] += value * value
+		self.__baseStatistics[classLabel][self.__CNT] += 1
+		self.__baseStatistics[classLabel][self.__VALSUM] += value
+		self.__baseStatistics[classLabel][self.__VALSQSUM] += value * value
+
+
+	def getStatistics(self):
+		return self.__statistics
 
 		
