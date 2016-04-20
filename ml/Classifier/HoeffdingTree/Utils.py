@@ -32,16 +32,6 @@ class Statistics(object):
 	def getStatisticsType(self):
 		return self.__statisticsType
 
-	@abstractmethod
-	def update(self, value, classLabel):
-		pass
-
-
-	@abstractmethod
-	def getStatistics(self):
-		pass
-
-
 
 class NominalFeatureStatistics(Statistics):
 	def __init__(self, numOfValues, numOfClasses):

@@ -6,20 +6,27 @@
 __author__ = 'zwy'
 
 import math
+import HoeffdingTree.Node
+import HoeffdingTree.Split
+import HoeffdingTree.HoeffdingTreeModel
 
-class HoeffdingTree(object):
+class HoeffdingTreeClassifier(object):
 	def __init__(self, 
 		gracePeriod, 
 		numOfClasses, 
 		hoeffdingBoundConfidence, 
 		hoeffdingTieThreshold, 
-		categoricalFeaturesInfo):
+		featuresInfo):
 		self.__root = None
 		self.__gracePeriod = gracePeriod
 		self.__numOfClasses = numOfClasses
 		self.__hoeffdingBoundConfidence = hoeffdingBoundConfidence
 		self.__hoeffdingTieThreshold = hoeffdingTieThreshold
 		self.__featuresInfo = featuresInfo
+
+
+	def getModel(self):
+		return HoeffdingTree.HoeffdingTreeModel.HoeffdingTreeModel(self.__root)
 
 
 	def train(self, instance):
@@ -62,7 +69,7 @@ class HoeffdingTree(object):
 				value = instance[splitFeature]
 				if(value < splitPoints):
 					return self.__leafForInstance(instance, node.getChildren()[0])
-				elif:
+				else:
 					return self.__leafForInstance(instance, node.getChildren()[1])
 			elif(featureType == 'nominal'):
 				for splitPoint in splitPoints:

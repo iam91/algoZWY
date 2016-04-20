@@ -51,7 +51,7 @@ class LearningNode(Node):
 		self.__statistics = {}
 		for feat in self.__featureInfo:
 			numOfValues = self.__featureInfo[feat]
-			if(numOfValue == 0):
+			if(numOfValues == 0):
 				self.__statistics[feat] \
 					= HoeffdingTree.Utils.ContinuousFeatureStatistcs(self.__numOfClasses)
 			else:
@@ -83,7 +83,7 @@ class LearningNode(Node):
 
 	def updateNode(self, instance):
 		classLabel = instance[-1]
-		for feat in self.__numOfFeatures:
+		for feat in range(self.__numOfFeatures):
 			value = instance[feat]
 			self.__statistics[feat].update(value, classLabel)
 		self.__classesCnt[classLabel] += 1

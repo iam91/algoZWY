@@ -8,7 +8,7 @@ __author__ = 'zwy'
 import HoeffdingTree.Node
 import HoeffdingTree.Split
 
-class HoeffdingTreeModal(object):
+class HoeffdingTreeModel(object):
 	def __init__(self, root):
 		self.__root = root
 
@@ -25,7 +25,7 @@ class HoeffdingTreeModal(object):
 				value = instance[splitFeature]
 				if(value < splitPoints):
 					return self.__leafForInstance(instance, node.getChildren()[0])
-				elif:
+				else:
 					return self.__leafForInstance(instance, node.getChildren()[1])
 			elif(featureType == 'nominal'):
 				for splitPoint in splitPoints:
@@ -33,5 +33,15 @@ class HoeffdingTreeModal(object):
 
 
 	def singleClassify(self, instance):
-		leaf = self.__traverse(instance, self.__root)
+		leaf = self.__leafForInstance(instance, self.__root)
 		return leaf.getMajorityClass()
+
+
+	def test(self, dataSet):
+		result = [self.singleClassify(data) == data[-1] for data in dataSet]
+		cnt = 0
+		for re in result:
+			if(not re):
+				cnt += 1
+		print(cnt / len(result))
+		return result
