@@ -140,7 +140,6 @@ class LearningNode(Node):
 					infoGain = preImpurity - postImpurity
 					currSplit = HoeffdingTree.Split.Split(feat, splitPoint, 'continuous', infoGain)
 					splitCandidates.append(currSplit)
-
 			elif(numOfValues > 0):
 				#nominal feature
 				stat = self.__statistics[feat].getStatistics()

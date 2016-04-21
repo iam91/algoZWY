@@ -85,47 +85,56 @@ class ContinuousFeatureStatistics(Statistics):
 		self.__baseStatistics[classLabel][self.VALSUM] += value
 		self.__baseStatistics[classLabel][self.VALSQSUM] += value * value
 
-
 	def getStatistics(self):
-		minValue = self.__baseStatistics[0][self.MINVAL]
-		maxValue = self.__baseStatistics[0][self.MAXVAL]
+		minValue = 0.0
+		maxValue = 0.0
+		atLeastOneClassFlag = False
 		for i in range(self.__numOfClasses):
-			if(self.__baseStatistics[i][self.MINVAL] < minValue):
-				minValue = self.__baseStatistics[i][self.MINVAL]
-			if(self.__baseStatistics[i][self.MAXVAL] > maxValue):
-				maxValue = self.__baseStatistics[i][self.MAXVAL]
+			if(self.__baseStatistics[i][self.CNT] > 2):
+				if(not atLeastOneClassFlag):
+					minValue = self.__baseStatistics[i][self.MINVAL]
+					maxValue = self.__baseStatistics[i][self.MAXVAL]
+					atLeastOneClassFlag = True
+				else:
+					if(self.__baseStatistics[i][self.MINVAL] < minValue):
+						minValue = self.__baseStatistics[i][self.MINVAL]
+					if(self.__baseStatistics[i][self.MAXVAL] > maxValue):
+						maxValue = self.__baseStatistics[i][self.MAXVAL]
 		binWidth = (maxValue - minValue) / self.__numOfBins
 		
 		splitPointCandidates = []
 		for i in range(self.__numOfBins + 1):
 			splitPointCandidates.append(minValue + i * binWidth)
-		
-		retStatistics = []
-		
 
 		meanList = []
 		varianceList = []
 		for i in range(self.__numOfClasses):
-			mean = self.__baseStatistics[i][self.VALSUM] / self.__baseStatistics[i][self.CNT]
-			variance = (self.__baseStatistics[i][self.VALSQSUM] 
-				- mean * self.__baseStatistics[i][self.VALSUM]) / (self.__baseStatistics[i][self.CNT] - 1)
+			if(self.__baseStatistics[i][self.CNT] > 2):
+				mean = self.__baseStatistics[i][self.VALSUM] / self.__baseStatistics[i][self.CNT]
+				variance = (self.__baseStatistics[i][self.VALSQSUM] 
+					- mean * self.__baseStatistics[i][self.VALSUM]) / (self.__baseStatistics[i][self.CNT] - 1)
+			else:
+				mean = 0.0
+				variance = 0.0
 			meanList.append(mean)
 			varianceList.append(variance)
-
 
 		statisticsForEachSplitPoint = []
 		for splitPoint in splitPointCandidates:
 			statisticsForEachClass = []
 			for i in range(self.__numOfClasses):
-				stddev = math.sqrt(varianceList[i])
-				normalizedSplitPoint = (splitPoint - meanList[i]) / stddev
-				
-				lessAndEqual = norm.cdf(normalizedSplitPoint)
-				larger = 1 - lessAndEqual
+				if(self.__baseStatistics[i][self.CNT] > 2):
+					stddev = math.sqrt(varianceList[i])
+					normalizedSplitPoint = (splitPoint - meanList[i]) / stddev
+					
+					lessAndEqual = norm.cdf(normalizedSplitPoint)
+					larger = 1 - lessAndEqual
 
-				lCnt = int(lessAndEqual * self.__baseStatistics[i][self.CNT])
-				rCnt = int(larger * self.__baseStatistics[i][self.CNT])
+					lCnt = int(lessAndEqual * self.__baseStatistics[i][self.CNT])
+					rCnt = int(larger * self.__baseStatistics[i][self.CNT])
+				else:
+					lCnt = 0
+					rCnt = 0
 				statisticsForEachClass.append((lCnt, rCnt))
 			statisticsForEachSplitPoint.append((splitPoint, statisticsForEachClass))
-
 		return statisticsForEachSplitPoint

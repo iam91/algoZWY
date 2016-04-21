@@ -22,7 +22,7 @@ else:
 	# class labels take the value 0, 1, 2, ... and -1 for known class
 	# ordinal features take the value 1, 2, 3, ...
 
-	if(fileDir.endswith("iris.csv")):
+	if(fileDir.endswith("IRIS.csv")):
 		# format iris
 		dataSet = []
 		for line in rawData:
@@ -60,7 +60,7 @@ else:
 		for line in rawData:
 			data = [int(val) for val in line]
 			dataSet.append(data)
-	elif(fileDir.endswith("eeg.csv")):
+	elif(fileDir.endswith("EEG.csv")):
 		# format eeg
 		dataSet = []
 		for line in rawData:
@@ -79,8 +79,8 @@ else:
 	#model.test(dataSet)
 
 	print('=====================================')
-	mm = {0: 0, 1: 0, 2: 0, 3: 0}#, 4: 0, 5: 0, 6: 0, 7: 0, 8: 0, 9: 0, 10: 0, 11: 0, 12: 0, 13: 0}
-	tree = HoeffdingTree.HoeffdingTree.HoeffdingTreeClassifier(400, 2, 0.1, 0.05, mm)
+	mm = {0: 0, 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0, 7: 0, 8: 0, 9: 0, 10: 0, 11: 0, 12: 0, 13: 0}
+	tree = HoeffdingTree.HoeffdingTree.HoeffdingTreeClassifier(200, 2, 1, 0.05, mm)
 	for data in dataSet:
 		tree.train(data)
 
