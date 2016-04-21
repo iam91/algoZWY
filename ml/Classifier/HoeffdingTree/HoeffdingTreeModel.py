@@ -29,11 +29,14 @@ class HoeffdingTreeModel(object):
 					return self.__leafForInstance(instance, node.getChildren()[1])
 			elif(featureType == 'nominal'):
 				for splitPoint in splitPoints:
-					return self.__leafForInstance(instance, node.getChildren()[splitPoint])
+					if(instance[splitFeature] == splitPoint):
+						return self.__leafForInstance(instance, node.getChildren()[splitPoint])
+
 
 
 	def singleClassify(self, instance):
 		leaf = self.__leafForInstance(instance, self.__root)
+		leaf._LearningNode__statistics[0].getStatistics()
 		return leaf.getMajorityClass()
 
 

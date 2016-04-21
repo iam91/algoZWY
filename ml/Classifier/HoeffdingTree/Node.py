@@ -107,6 +107,7 @@ class LearningNode(Node):
 		splitCandidates = []
 		for feat in self.__featureInfo:
 			numOfValues = self.__featureInfo[feat]
+			currSplit = None
 			if(numOfValues == 0):
 				#continuous feature
 				pass
@@ -137,11 +138,9 @@ class LearningNode(Node):
 			self.__hoeffdingBoundConfidence, 
 			self.__numOfInstancesFromBeginning)
 		###
-		print(2, best.getInfoGain() - secondBest.getInfoGain(), hoeffdingBound)
 		if((best.getInfoGain() - secondBest.getInfoGain()) > hoeffdingBound or hoeffdingBound < self.__hoeffdingTieThreshold):
 			split = best
 			numOfChildren = split.getNumOfSplitBins()
-			print('ooops')
 			# create a split node waiting for setting children
 			splitNode = HoeffdingTree.Node.SplitNode(split, self.getDepth())
 
@@ -157,12 +156,9 @@ class LearningNode(Node):
 			# attach children to their father(the newly created split node)
 			splitNode.setChildren(children)
 			self.__numOfInstancesSinceLastTry = self.__numOfInstancesFromBeginning
-			print('before returning splitNode')
 			return splitNode
 		else:
-			print('before returning self')
 			return self
-
 
 
 	def __computeHoeffdingBound(self, r, confidence, weight):

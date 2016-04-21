@@ -145,7 +145,7 @@ class LearningNode(Node):
 				featureValueWeight = sum(classVec)
 				postImpurity += (featureValueWeight 
 					/ self.__numOfInstancesFromBeginning) * VFDTClassifier.Impurity.entropy(classVec, self.__numOfClasses)
-
+	
 			splitCandidates.append((feat, postImpurity))
 
 		preImpurity = VFDTClassifier.Impurity.entropy(self.__classesCnt, self.__numOfClasses)
@@ -158,7 +158,6 @@ class LearningNode(Node):
 		infoGainRange = math.log(self.__numOfClasses)
 		hoeffdingBound = self.__computeHoeffdingBound(infoGainRange, 
 			hoeffdingBoundConfidence, self.__numOfInstancesFromBeginning)
-		print(2, best[1] - secondBest[1], hoeffdingBound)
 		if((best[1] - secondBest[1]) > hoeffdingBound or hoeffdingBound < hoeffdingTieThreshold):
 			splitFeature = best[0]
 			splitPoints = [x for x in range(categoricalFeaturesInfo[splitFeature])]
