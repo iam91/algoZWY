@@ -60,20 +60,28 @@ else:
 		for line in rawData:
 			data = [int(val) for val in line]
 			dataSet.append(data)
+	elif(fileDir.endswith("eeg.csv")):
+		# format eeg
+		dataSet = []
+		for line in rawData:
+			data = [float(val) for val in line[0:14]]
+			data.append(int(line[-1]))
+			dataSet.append(data)
 	
 	# for discreate features, their values should start from 0
-	mm = {0: 3, 1: 5, 2: 4, 3: 4, 4: 3, 5: 2, 6: 3, 7: 3}
-	tree = VFDTClassifier.VFDTClassifier.VFDT(50, 5, 0.000001, 0.05, mm)
-	for data in dataSet[0:200]:
-		tree.train(data)
+	#mm = {0: 3, 1: 5, 2: 4, 3: 4, 4: 3, 5: 2, 6: 3, 7: 3}
+	#tree = VFDTClassifier.VFDTClassifier.VFDT(50, 5, 0.000001, 0.05, mm)
+	#for data in dataSet[0:200]:
+		#tree.train(data)
 
-	model = tree.getModel() 
+	#model = tree.getModel() 
 	#model.printModel()
-	model.test(dataSet)
+	#model.test(dataSet)
 
 	print('=====================================')
-	tree = HoeffdingTree.HoeffdingTree.HoeffdingTreeClassifier(50, 5, 0.000001, 0.05, mm)
-	for data in dataSet[0:200]:
+	mm = {0: 0, 1: 0, 2: 0, 3: 0}#, 4: 0, 5: 0, 6: 0, 7: 0, 8: 0, 9: 0, 10: 0, 11: 0, 12: 0, 13: 0}
+	tree = HoeffdingTree.HoeffdingTree.HoeffdingTreeClassifier(400, 2, 0.1, 0.05, mm)
+	for data in dataSet:
 		tree.train(data)
 
 	model = tree.getModel() 

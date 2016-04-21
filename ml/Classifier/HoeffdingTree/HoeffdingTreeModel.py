@@ -23,7 +23,7 @@ class HoeffdingTreeModel(object):
 			featureType = split.getFeatureType()
 			if(featureType == 'continuous'):
 				value = instance[splitFeature]
-				if(value < splitPoints):
+				if(value <= splitPoints):
 					return self.__leafForInstance(instance, node.getChildren()[0])
 				else:
 					return self.__leafForInstance(instance, node.getChildren()[1])

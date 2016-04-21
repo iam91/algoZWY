@@ -49,11 +49,12 @@ class LearningNode(Node):
 		self.__numOfInstancesSinceLastTry = 0
 		self.__numOfInstancesFromBeginning = 0
 		self.__statistics = {}
+		self.__numOfBins = 10
 		for feat in self.__featureInfo:
 			numOfValues = self.__featureInfo[feat]
 			if(numOfValues == 0):
 				self.__statistics[feat] \
-					= HoeffdingTree.Utils.ContinuousFeatureStatistcs(self.__numOfClasses)
+					= HoeffdingTree.Utils.ContinuousFeatureStatistics(self.__numOfClasses)
 			else:
 				self.__statistics[feat] \
 					= HoeffdingTree.Utils.NominalFeatureStatistics(numOfValues, self.__numOfClasses)
@@ -79,6 +80,17 @@ class LearningNode(Node):
 
 	def getFatherBranch(self):
 		return self.__fatherBranch
+
+
+	def isPure(self):
+		atLeastOneClass = False
+		pureFlag = True
+		for cnt in self.__classesCnt:
+			if(cnt != 0 and atLeastOneClass == False):
+				atLeastOneClass = True
+			elif(cnt != 0 and atLeastOneClass == True):
+				pureFlag = False
+		return pureFlag
 
 
 	def updateNode(self, instance):
@@ -110,7 +122,25 @@ class LearningNode(Node):
 			currSplit = None
 			if(numOfValues == 0):
 				#continuous feature
-				pass
+				stat = self.__statistics[feat].getStatistics()
+				for statForSplitPoint in stat:
+					splitPoint = statForSplitPoint[0]
+					statForCurrPoint = statForSplitPoint[1]
+					lClassCntVec = []
+					rClassCntVec = []
+					for i in range(self.__numOfClasses):
+						lClassCntVec.append(statForCurrPoint[i][0])
+						rClassCntVec.append(statForCurrPoint[i][1])
+					lTot = sum(lClassCntVec)
+					rTot = sum(rClassCntVec)
+					tot = lTot + rTot
+					lEnt = HoeffdingTree.Utils.entropy(lClassCntVec)
+					rEnt = HoeffdingTree.Utils.entropy(rClassCntVec)
+					postImpurity = (lTot / tot) * lEnt + (rTot / tot) * rEnt
+					infoGain = preImpurity - postImpurity
+					currSplit = HoeffdingTree.Split.Split(feat, splitPoint, 'continuous', infoGain)
+					splitCandidates.append(currSplit)
+
 			elif(numOfValues > 0):
 				#nominal feature
 				stat = self.__statistics[feat].getStatistics()
@@ -126,7 +156,7 @@ class LearningNode(Node):
 					list(range(numOfValues)), 
 					'nominal', 
 					currInfoGain)
-			splitCandidates.append(currSplit)
+				splitCandidates.append(currSplit)
 
 		splitCandidates.sort(key = lambda x: x.getInfoGain(), reverse = True)
 
@@ -137,10 +167,11 @@ class LearningNode(Node):
 		hoeffdingBound = self.__computeHoeffdingBound(infoGainRange, 
 			self.__hoeffdingBoundConfidence, 
 			self.__numOfInstancesFromBeginning)
-		###
+		
 		if((best.getInfoGain() - secondBest.getInfoGain()) > hoeffdingBound or hoeffdingBound < self.__hoeffdingTieThreshold):
 			split = best
 			numOfChildren = split.getNumOfSplitBins()
+
 			# create a split node waiting for setting children
 			splitNode = HoeffdingTree.Node.SplitNode(split, self.getDepth())
 
