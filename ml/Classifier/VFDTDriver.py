@@ -80,10 +80,10 @@ else:
 
 	print('=====================================')
 	mm = {0: 0, 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0, 7: 0, 8: 0, 9: 0, 10: 0, 11: 0, 12: 0, 13: 0}
-	tree = HoeffdingTree.HoeffdingTree.HoeffdingTreeClassifier(200, 2, 1, 0.05, mm)
+	tree = HoeffdingTree.HoeffdingTree.HoeffdingTreeClassifier(200, 2, 0.0001, 0.05, mm)
 	for data in dataSet:
-		tree.train(data)
+		tree.train(data[0:14900])
 
 	model = tree.getModel() 
 	#model.printModel()
-	model.test(dataSet)
+	model.test(dataSet[14900:14980])

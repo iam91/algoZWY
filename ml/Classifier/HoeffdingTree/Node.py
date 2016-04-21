@@ -166,7 +166,7 @@ class LearningNode(Node):
 		hoeffdingBound = self.__computeHoeffdingBound(infoGainRange, 
 			self.__hoeffdingBoundConfidence, 
 			self.__numOfInstancesFromBeginning)
-		
+		#print(best.getInfoGain() - secondBest.getInfoGain(), hoeffdingBound)
 		if((best.getInfoGain() - secondBest.getInfoGain()) > hoeffdingBound or hoeffdingBound < self.__hoeffdingTieThreshold):
 			split = best
 			numOfChildren = split.getNumOfSplitBins()
@@ -185,7 +185,6 @@ class LearningNode(Node):
 
 			# attach children to their father(the newly created split node)
 			splitNode.setChildren(children)
-			self.__numOfInstancesSinceLastTry = self.__numOfInstancesFromBeginning
 			return splitNode
 		else:
 			return self

@@ -53,6 +53,7 @@ class HoeffdingTreeClassifier(object):
 							self.__root = tryResultNode
 						else:
 							fatherBranch.getFatherPointer().setChild(fatherBranch.getChildIndex(), tryResultNode)
+					instanceLeaf.resetNumOfInstancesSinceLastTry()
 			else:
 				pass
 
