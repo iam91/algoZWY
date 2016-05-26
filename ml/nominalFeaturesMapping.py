@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-' Data preprocessing: discrete features map'
+' Data preprocessing: discrete features map '
 
 __author__ = 'zwy'
 
