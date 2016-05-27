@@ -41,12 +41,11 @@ public class MergeSort{
 		int n = a.length;
 		for(int sz = 1; sz < n; sz *= 2){
 			int dsz = sz * 2;
-			for(int i = 0; i < n; i += dsz){
+			for(int i = 0; i + sz < n; i += dsz){
 				int l = i; 
 				int r = i + 2 * sz - 1;
 				int mid = l + sz - 1;
 				r = r < n ? r : n - 1;
-				mid = mid < n ? mid : n - 1;
 				merge(a, b, l, r, mid);
 			}
 		}
