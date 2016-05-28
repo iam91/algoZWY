@@ -4,6 +4,7 @@ public class SortClient{
 	public static final int SHELL = 3;
 	public static final int MERGE_TOPDOWN = 4;
 	public static final int MERGE_BUTTOMUP = 5;
+	public static final int QUICK = 6;
 
 	public static void sort(Comparable[] a, int sortType){
 		switch(sortType){
@@ -21,6 +22,10 @@ public class SortClient{
 				break;
 			case MERGE_BUTTOMUP:
 				MergeSort.sort(a, false);
+				break;
+			case QUICK:
+				QuickSort.sort(a);
+				break;
 			default:
 				break;
 		}
