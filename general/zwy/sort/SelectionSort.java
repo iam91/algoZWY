@@ -1,3 +1,7 @@
+package zwy.sort;
+
+import zwy.util.Util;
+
 public class SelectionSort{
 	public static void sort(Comparable[] a){
 		selectionSort(a);
@@ -8,11 +12,11 @@ public class SelectionSort{
 		for(int i = 0; i < n; i++){
 			int minId = i;
 			for(int j = i; j < n; j++){
-				if(SortUtils.less(a[j], a[minId])){
+				if(Util.less(a[j], a[minId])){
 					minId = j;
 				}
 			}
-			SortUtils.swap(a, minId, i);
+			Util.swap(a, minId, i);
 		}
 	}
 }

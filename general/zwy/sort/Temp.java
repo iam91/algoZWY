@@ -1,3 +1,5 @@
+package zwy.sort;
+
 public class Temp{
 	public static void main(String[] args){
 		Integer[] a = {1, 5, 5, 0, 2, 6};

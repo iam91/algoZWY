@@ -1,4 +1,6 @@
-public class SortUtils{
+package zwy.util;
+
+public class Util{
 	public static boolean less(Comparable a, Comparable b){
 		return a.compareTo(b) < 0;
 	}

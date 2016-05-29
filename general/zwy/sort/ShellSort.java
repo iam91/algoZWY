@@ -1,3 +1,7 @@
+package zwy.sort;
+
+import zwy.util.Util;
+
 public class ShellSort{
 	public static void sort(Comparable[] a){
 		shellSort(a);
@@ -13,8 +17,8 @@ public class ShellSort{
 		}
 		while(h > 0){
 			for(int i = 0; i < n; i++){
-				for(int j = i; j > 0 && SortUtils.less(a[j], a[j - h]); j -= h){
-					SortUtils.swap(a, j, j - h);
+				for(int j = i; j > 0 && Util.less(a[j], a[j - h]); j -= h){
+					Util.swap(a, j, j - h);
 				}
 			}
 			h = h / 3;

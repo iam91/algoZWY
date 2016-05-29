@@ -1,3 +1,7 @@
+package zwy.sort;
+
+import zwy.util.Util;
+
 import java.util.Random;
 
 public class QuickSort{
@@ -22,18 +26,18 @@ public class QuickSort{
 			return l;
 		}
 		int t = l + rand.nextInt(r - l + 1);
-		SortUtils.swap(a, t, l);
+		Util.swap(a, t, l);
 
 		Comparable piv = a[l];
 		int i = l;
 		int j = r + 1;
 		while(true){
-			while(!SortUtils.less(piv, a[++i])){
+			while(!Util.less(piv, a[++i])){
 				if(i == r){
 					break;
 				}
 			}
-			while(SortUtils.less(piv, a[--j])){
+			while(Util.less(piv, a[--j])){
 				if(j == l){
 					break;
 				}
@@ -41,9 +45,9 @@ public class QuickSort{
 			if(j <= i){
 				break;
 			}
-			SortUtils.swap(a, i, j);
+			Util.swap(a, i, j);
 		}
-		SortUtils.swap(a, l, j);
+		Util.swap(a, l, j);
 		return j;
 	}
 	/*
@@ -52,22 +56,22 @@ public class QuickSort{
 			return l;
 		}
 		int t = l + rand.nextInt(r - l + 1);
-		SortUtils.swap(a, t, l);
+		Util.swap(a, t, l);
 
 		Comparable piv = a[l];
 		int pivId = l;
 		int i = pivId; 
 		int j = r;
 		while(i < j){
-			while(pivId < j && SortUtils.less(piv, a[j])){
+			while(pivId < j && Util.less(piv, a[j])){
 				j--;
 			}
-			SortUtils.swap(a, j, pivId);
+			Util.swap(a, j, pivId);
 			pivId = j;
-			while(i < pivId && !SortUtils.less(piv, a[i])){
+			while(i < pivId && !Util.less(piv, a[i])){
 				i++;
 			}
-			SortUtils.swap(a, i, pivId);
+			Util.swap(a, i, pivId);
 			pivId = i;
 		}
 		return pivId;

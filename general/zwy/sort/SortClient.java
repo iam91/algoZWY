@@ -1,3 +1,5 @@
+package zwy.sort;
+
 public class SortClient{
 	public static final int SELECTION = 1;
 	public static final int INSERTION = 2;

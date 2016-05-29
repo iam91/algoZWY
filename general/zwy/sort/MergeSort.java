@@ -1,3 +1,7 @@
+package zwy.sort;
+
+import zwy.util.Util;
+
 public class MergeSort{
 	public static void sort(Comparable[] a, boolean isTopDown){
 		int n = a.length;
@@ -15,10 +19,10 @@ public class MergeSort{
 		int rHead = mid + 1;
 		int head = l;
 		while(head <= r){
-			if(rHead > r || (lHead <= mid && SortUtils.less(a[lHead], a[rHead]))){
+			if(rHead > r || (lHead <= mid && Util.less(a[lHead], a[rHead]))){
 				b[head++] = a[lHead++];
 			}
-			else if(lHead > mid || (rHead <= r && !SortUtils.less(a[lHead], a[rHead]))){
+			else if(lHead > mid || (rHead <= r && !Util.less(a[lHead], a[rHead]))){
 				b[head++] = a[rHead++];
 			}
 		}
