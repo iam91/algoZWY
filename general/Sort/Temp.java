@@ -5,7 +5,7 @@ public class Temp{
 		Integer[] c = {1, 5, 5, 0, 2, 6};
 		Integer[] d = {1, 5, 5, 0, 2, 6};
 		Integer[] e = {1, 5, 5, 0, 2, 6};
-		Integer[] f = {1, 5, 5, 0, 2, 6};
+		Integer[] f = {1, 5, 5, 0, 2, 6, 9, -1, -3, 45};
 		SortClient.sort(a, SortClient.INSERTION);
 		SortClient.sort(b, SortClient.SELECTION);
 		SortClient.sort(c, SortClient.SHELL);
