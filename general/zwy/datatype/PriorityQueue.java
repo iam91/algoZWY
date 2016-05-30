@@ -3,20 +3,14 @@ package zwy.datatype;
 import zwy.util.Util;
 
 public class PriorityQueue{
-	private static int LENGTH = 10;
 
 	private Comparable[] pq;
 	private int length;
 	private int N;
 
 	public PriorityQueue(){
-		this(LENGTH);
-	}
-
-	public PriorityQueue(int max){
-		pq = new Comparable[max + 1];
-		length = max;
 		N = 0;
+		pq = new Comparable[2];
 	}
 
 	public int size(){
@@ -28,10 +22,17 @@ public class PriorityQueue{
 	}
 
 	public void insert(Comparable a){
-		if(N < length){
-			pq[++N] = a;
-			swim(N);
+		N++;
+		if(N > pq.length - 1){
+			Comparable[] newPQ = new Comparable[pq.length * 2 - 1];
+			for(int i = 1; i < pq.length; i++){
+				newPQ[i] = pq[i];
+				pq[i] = null;
+			}
+			pq = newPQ;
 		}
+		pq[N] = a;
+		swim(N);
 	}
 
 	public Comparable max(){
@@ -44,12 +45,24 @@ public class PriorityQueue{
 		if(N > 0){
 			Util.swap(pq, 1, N--);
 			sink(1);
+			pq[N + 1] = null;
+		}
+		if(N <= (pq.length - 1) / 4){
+			Comparable[] newPQ = new Comparable[pq.length / 2 + 1];
+			for(int i = 1; i <= N; i++){
+				newPQ[i] = pq[i];
+				pq[i] = null;
+			}
+			pq = newPQ;
 		}
 		return ret;
 	}
 
+	public void pp(){
+		System.out.println("--- " + N + "," + (pq.length - 1) + " ---");
+	}
+
 	public void p(){
-		System.out.println(N + "," + length);
 		for(int i = 1; i <= N; i++){
 			System.out.println(pq[i]);
 		}

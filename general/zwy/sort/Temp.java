@@ -8,12 +8,14 @@ public class Temp{
 		Integer[] d = {1, 5, 5, 0, 2, 6};
 		Integer[] e = {1, 5, 5, 0, 2, 6};
 		Integer[] f = {1, 5, 5, 0, 2, 6, 9, -1, -3, 45};
+		Integer[] g = {1, 5, 5, 0, 2, 6, 9, -1, -3, 45};
 		SortClient.sort(a, SortClient.INSERTION);
 		SortClient.sort(b, SortClient.SELECTION);
 		SortClient.sort(c, SortClient.SHELL);
 		SortClient.sort(d, SortClient.MERGE_TOPDOWN);
 		SortClient.sort(e, SortClient.MERGE_BUTTOMUP);
 		SortClient.sort(f, SortClient.QUICK);
+		SortClient.sort(g, SortClient.HEAP);
 		/*
 		for(int i = 0; i < a.length; i++){
 			System.out.println(a[i]);
@@ -34,9 +36,13 @@ public class Temp{
 		for(int i = 0; i < b.length; i++){
 			System.out.println(e[i]);
 		}
-		System.out.println("---");*/
+		System.out.println("---");
 		for(int i = 0; i < f.length; i++){
 			System.out.println(f[i]);
+		}
+		System.out.println("---");*/
+		for(int i = 0; i < g.length; i++){
+			System.out.println(g[i]);
 		}
 		System.out.println("---");
 	}
