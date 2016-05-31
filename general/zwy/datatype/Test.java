@@ -37,5 +37,25 @@ public class Test{
 		t.deleteMax();
 		t.p();
 		System.out.println(t.size() + "," + t.size(0, 7));
+		Iterator<Integer> iter = t.keys().iterator();
+		while(iter.hasNext()){
+			System.out.print(iter.next() + " ");
+		}
+		System.out.println();
+		iter = t.keys(0, 8).iterator();
+		while(iter.hasNext()){
+			System.out.print(iter.next() + " ");
+		}
+		System.out.println();
+		iter = t.keys().iterator();
+		while(iter.hasNext()){
+			System.out.print(iter.next() + " ");
+		}
+		System.out.println();
+		iter = t.keys(0, 8).iterator();
+		while(iter.hasNext()){
+			System.out.print(iter.next() + " ");
+		}
+		System.out.println();
 	}
 }

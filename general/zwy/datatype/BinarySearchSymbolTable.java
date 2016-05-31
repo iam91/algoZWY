@@ -186,6 +186,55 @@ public class BinarySearchSymbolTable<K extends Comparable<K>, V>
 		return rhi - rlo + 1;
 	}
 
+	public Iterable<K> keys(){
+		return new Iterable<K>(){
+			public Iterator<K> iterator(){
+				return new Iterator<K>(){
+					
+					private int curr = 0;
+
+					public boolean hasNext(){
+						return curr < n;
+					}
+
+					public K next(){
+						return keys[curr++];
+					}
+
+					public void remove(){}
+				};
+			}
+		};
+	}
+
+	public Iterable<K> keys(K lo, K hi){
+		if(lo == null || hi == null || hi.compareTo(lo) <= 0){
+			return null;
+		}
+		return new Iterable<K>(){
+			public Iterator<K> iterator(){
+				return new Iterator<K>(){
+
+					private int rlo = rank(lo);
+					private int prehi = rank(hi);
+					private int rhi = 
+						(prehi >= n || hi.compareTo(keys[prehi]) != 0) ? prehi - 1: prehi;
+					private int curr = rlo;
+
+					public boolean hasNext(){
+						return curr <= rhi;
+					}
+
+					public K next(){
+						return keys[curr++];
+					}
+
+					public void remove(){}
+				};
+			}
+		};
+	}
+
 	private Object resize(Object arr, int n){
 		Class cl = arr.getClass();
 		if(!cl.isArray()){

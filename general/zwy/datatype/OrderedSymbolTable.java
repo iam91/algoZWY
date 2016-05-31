@@ -21,6 +21,8 @@ public abstract class OrderedSymbolTable<K extends Comparable<K>, V>{
 	public abstract void deleteMin();
 	public abstract void deleteMax();
 	public abstract int size(K lo, K hi);
+	public abstract Iterable<K> keys();
+	public abstract Iterable<K> keys(K lo, K hi);
 	public boolean isEmpty(){
 		return n == 0;
 	}
