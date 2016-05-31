@@ -10,7 +10,7 @@ public class SequentialSearchSymbolTable<K, V> extends SymbolTable<K, V>{
 		head = null;
 	}
 
-	public void put(K key, V val){;
+	public void put(K key, V val){
 		if(key == null || val == null){
 			return;
 		}

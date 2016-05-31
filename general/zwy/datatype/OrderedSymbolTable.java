@@ -12,8 +12,6 @@ public abstract class OrderedSymbolTable<K extends Comparable<K>, V>{
 	public abstract V get(K key);
 	public abstract void delete(K key);
 	public abstract boolean contains(K key);
-	public abstract boolean isEmpty();
-	public abstract int size();
 	public abstract K min();
 	public abstract K max();
 	public abstract K floor(K key);
@@ -23,4 +21,10 @@ public abstract class OrderedSymbolTable<K extends Comparable<K>, V>{
 	public abstract void deleteMin();
 	public abstract void deleteMax();
 	public abstract int size(K lo, K hi);
+	public boolean isEmpty(){
+		return n == 0;
+	}
+	public int size(){
+		return n;
+	}
 }

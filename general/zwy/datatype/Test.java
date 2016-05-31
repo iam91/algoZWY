@@ -4,68 +4,38 @@ import java.util.Iterator;
 
 public class Test{
 	public static void main(String[] args){
-		SequentialSearchSymbolTable<String, Integer> t = 
-			new SequentialSearchSymbolTable<String, Integer>();
+		Integer[] f = {1, 5, 7, 0, 2, 6, 9, -1, -3, 45};
+		BinarySearchSymbolTable<Integer, Integer> t 
+			= new BinarySearchSymbolTable<Integer, Integer>();
 		for(int i = 0; i < 10; i++){
-			Integer value = i;
-			String key = value.toString();
-			t.put(key, value);
+			t.put(f[i], f[i]);
+			System.out.print(f[i] + " ");
 		}
+		System.out.println();
+		t.p();
 		for(int i = 0; i < 10; i++){
-			Integer ii = i % 2 == 1 ? i : i + 10;
-			String key = ii.toString();
-			if(t.contains(key)){
-				System.out.println(t.get(key));
+			System.out.print(t.rank(f[i] + 1) + " ");
+		}
+		System.out.println();
+		for(int i = 0; i < 10; i++){
+			int tt = f[i] > 0 ? f[i] : -f[i];
+			Integer k = tt % 2 == 0 ? f[i] : f[i] + 1000;
+			System.out.print(k + ",");
+			if(t.contains(k)){
+				System.out.print(t.get(k) + " ");
+				t.delete(k);
+			}
+			else{
+				System.out.print("none ");
 			}
 		}
-		System.out.println("---------------");
-		for(int i = 0; i < 10; i++){
-			Integer ii = i;
-			String key = ii.toString();
-			if(t.contains(key)){
-				System.out.println(t.get(key));
-			}
-		}
-		System.out.println("---------------");
-		for(int i = 0; i < 10; i++){
-			Integer ii = i % 2 == 1 ? i : i + 10;
-			String key = ii.toString();
-			if(t.contains(key)){
-				System.out.println(key);
-				t.delete(key);
-			}
-		}
-		System.out.println("===============");
-		for(int i = 0; i < 10; i++){
-			Integer ii = i;
-			String key = ii.toString();
-			if(t.contains(key)){
-				System.out.println(t.get(key));
-			}
-		}
-		System.out.println("---------------");
-		Iterator<String> iter = t.keys().iterator();
-		while(iter.hasNext()){
-			System.out.println(iter.next());
-		}
-		System.out.println("---------------");
-		Iterator<String> iter1 = t.keys().iterator();
-		while(iter1.hasNext()){
-			System.out.println(iter1.next());
-		}
-		t.put("2", 33);
-		System.out.println(t.size() + "+++");
-		System.out.println("---------------");
-		iter = t.keys().iterator();
-		while(iter.hasNext()){
-			System.out.println(t.get(iter.next()));
-		}
-		t.put("22", 22);
-		System.out.println(t.size() + "+++");
-		System.out.println("---------------");
-		iter = t.keys().iterator();
-		while(iter.hasNext()){
-			System.out.println(t.get(iter.next()));
-		}
+		System.out.println();
+		t.p();
+		System.out.println("min " + t.min() + ",max " + t.max());
+		System.out.println(t.ceiling(0) + "," + t.floor(0) + " " + t.ceiling(5) + "," + t.floor(5));
+		t.deleteMin();
+		t.deleteMax();
+		t.p();
+		System.out.println(t.size() + "," + t.size(0, 7));
 	}
 }
