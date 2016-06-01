@@ -5,14 +5,25 @@ import java.util.Iterator;
 public class Test{
 	public static void main(String[] args){
 		Integer[] f = {1, 5, 7, 0, 2, 6, 9, -1, -3, 45};
-		BinarySearchSymbolTable<Integer, Integer> t 
-			= new BinarySearchSymbolTable<Integer, Integer>();
+		BSTSymbolTable<Integer, Integer> t 
+			= new BSTSymbolTable<Integer, Integer>();
 		for(int i = 0; i < 10; i++){
-			t.put(f[i], f[i]);
+			t.put(f[i], f[i] + 1);
 			System.out.print(f[i] + " ");
 		}
 		System.out.println();
-		t.p();
+		for(int i = 0; i < 10; i++){
+			System.out.print(t.get(f[i]) + " ");
+		}
+		System.out.println();
+		System.out.println(t.size());
+		t.delete(0);
+		
+		for(int i = 0; i < 10; i++){
+			System.out.print(t.get(f[i]) + " ");
+		}
+
+		/*
 		for(int i = 0; i < 10; i++){
 			System.out.print(t.rank(f[i] + 1) + " ");
 		}
@@ -57,5 +68,6 @@ public class Test{
 			System.out.print(iter.next() + " ");
 		}
 		System.out.println();
+		*/
 	}
 }

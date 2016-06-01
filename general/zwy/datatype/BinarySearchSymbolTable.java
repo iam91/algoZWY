@@ -38,13 +38,6 @@ public class BinarySearchSymbolTable<K extends Comparable<K>, V>
 		}
 	}
 
-	public void p(){
-		for(int i = 0; i < n; i++){
-			System.out.print(keys[i] + " ");
-		}
-		System.out.println();
-	}
-
 	public V get(K key){
 		if(key == null){
 			return null;
