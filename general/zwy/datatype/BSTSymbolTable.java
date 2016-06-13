@@ -38,12 +38,7 @@ public class BSTSymbolTable<K extends Comparable<K>, V>
 	}
 
 	private int size(Node root){
-		if(root == null){
-			return 0;
-		}
-		else{
-			return root.size;
-		}
+		return root == null ? 0 : root.size;
 	}
 
 	public V get(K key){
@@ -336,6 +331,10 @@ public class BSTSymbolTable<K extends Comparable<K>, V>
 			return 0;
 		}
 		return root.size;
+	}
+
+	public boolean isEmpty(){
+		return root == null;
 	}
 
 	public Iterable<K> keys(){

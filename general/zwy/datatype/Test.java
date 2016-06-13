@@ -9,27 +9,53 @@ public class Test{
 			= new BSTSymbolTable<Integer, Integer>();
 		BinarySearchSymbolTable<Integer, Integer> p
 			= new BinarySearchSymbolTable<Integer, Integer>();
+		RedBlackTreeSymbolTable<Integer, Integer> r
+			= new RedBlackTreeSymbolTable<Integer, Integer>();
 		for(int i = 0; i < 10; i++){
 			t.put(f[i], f[i] + 1);
 			p.put(f[i], f[i] + 1);
+			r.put(f[i], f[i] + 1);
 			System.out.print(f[i] + " ");
 		}
 		System.out.println();
+
+		Iterator<Integer> iter = r.keys().iterator();
+		while(iter.hasNext()){
+			System.out.print(iter.next() + " ");
+		}
+		System.out.println();
+
+		for(int i = 0; i < 10; i++){
+			System.out.print(r.get(f[i]) + " ");
+		}
+		System.out.println();
+		System.out.println(r.size());
+		r.deleteMin();
+		iter = r.keys().iterator();
+		while(iter.hasNext()){
+			System.out.print(iter.next() + " ");
+		}
+		System.out.println();
+		System.out.println(r.size());
+		r.deleteMax();
+		iter = r.keys().iterator();
+		while(iter.hasNext()){
+			System.out.print(iter.next() + " ");
+		}
+		System.out.println();
+		System.out.println(r.size());
+		for(int i = 0; i < 10; i++){
+			System.out.print(r.get(f[i]) + " ");
+		}
+		System.out.println();
+		/*
 		for(int i = 0; i < 10; i++){
 			System.out.print(t.get(f[i]) + " ");
 		}
 		System.out.println();
 		System.out.println(t.size());
-		t.delete(0);
-		p.delete(0);
 		
-		for(int i = 0; i < 10; i++){
-			System.out.print(t.get(f[i]) + " ");
-		}
-		System.out.println();
-		System.out.println(t.size());
-		
-		Iterator<Integer> iter = t.keys().iterator();
+		iter = t.keys().iterator();
 		while(iter.hasNext()){
 			Integer tt = iter.next();
 			System.out.print(tt + ":" + t.rank(tt) + ":" + p.rank(tt) + " ");
@@ -50,51 +76,6 @@ public class Test{
 		t.deleteMin();
 		t.deleteMax();
 		iter = t.keys().iterator();
-		while(iter.hasNext()){
-			System.out.print(iter.next() + " ");
-		}
-		System.out.println();
-		/*
-		for(int i = 0; i < 10; i++){
-			System.out.print(t.rank(f[i] + 1) + " ");
-		}
-		System.out.println();
-		for(int i = 0; i < 10; i++){
-			int tt = f[i] > 0 ? f[i] : -f[i];
-			Integer k = tt % 2 == 0 ? f[i] : f[i] + 1000;
-			System.out.print(k + ",");
-			if(t.contains(k)){
-				System.out.print(t.get(k) + " ");
-				t.delete(k);
-			}
-			else{
-				System.out.print("none ");
-			}
-		}
-		System.out.println();
-		t.p();
-		System.out.println("min " + t.min() + ",max " + t.max());
-		System.out.println(t.ceiling(0) + "," + t.floor(0) + " " + t.ceiling(5) + "," + t.floor(5));
-		t.deleteMin();
-		t.deleteMax();
-		t.p();
-		System.out.println(t.size() + "," + t.size(0, 7));
-		Iterator<Integer> iter = t.keys().iterator();
-		while(iter.hasNext()){
-			System.out.print(iter.next() + " ");
-		}
-		System.out.println();
-		iter = t.keys(0, 8).iterator();
-		while(iter.hasNext()){
-			System.out.print(iter.next() + " ");
-		}
-		System.out.println();
-		iter = t.keys().iterator();
-		while(iter.hasNext()){
-			System.out.print(iter.next() + " ");
-		}
-		System.out.println();
-		iter = t.keys(0, 8).iterator();
 		while(iter.hasNext()){
 			System.out.print(iter.next() + " ");
 		}

@@ -10,11 +10,13 @@ public class BinarySearchSymbolTable<K extends Comparable<K>, V>
 
 	private K[] keys;
 	private V[] values;
+	private int n;
 
 	public BinarySearchSymbolTable(){
 		super();
 		keys = (K[])new Comparable[1];
 		values = (V[])new Object[1];
+		n = 0;
 	}
 
 	public void put(K key, V val){
@@ -177,6 +179,14 @@ public class BinarySearchSymbolTable<K extends Comparable<K>, V>
 			rhi--;
 		}
 		return rhi - rlo + 1;
+	}
+
+	public int size(){
+		return n;
+	}
+
+	public boolean isEmpty(){
+		return n == 0;
 	}
 
 	public Iterable<K> keys(){
