@@ -20,7 +20,6 @@ public class RedBlackTreeSymbolTable<K extends Comparable<K>, V>
 			return;
 		}
 		root = put(key, val, root);
-		root.color = BLACK;
 	}
 
 	private Node put(K key, V val, Node root){
@@ -28,17 +27,18 @@ public class RedBlackTreeSymbolTable<K extends Comparable<K>, V>
 			return new Node(key, val, 1, RED);
 		}
 		int cmp = key.compareTo(root.key);
-		if(cmp > 0){
-			root.right = put(key, val, root.right);
-		}
-		else if(cmp < 0){
+		if(cmp < 0){
 			root.left = put(key, val, root.left);
 		}
-		else{
-			root.value = val;
+		else if(cmp > 0){
+			root.right = put(key, val, root.right);
 		}
-		
-		return fixUp(root);
+		else{
+			root.key = key;
+		}
+		root = fixUp(root);
+		root.size = 1 + size(root.left) + size(root.right);
+		return root;
 	}
 
 	private Node fixUp(Node root){
@@ -46,12 +46,11 @@ public class RedBlackTreeSymbolTable<K extends Comparable<K>, V>
 			root = rotateLeft(root);
 		}
 		if(isRed(root.left) && isRed(root.left.left)){
-			root = rotateRight(root);
+			root = rotateRight(root.left);
 		}
 		if(isRed(root.left) && isRed(root.right)){
 			flipColors(root);
 		}
-		root.size = size(root.left) + size(root.right) + 1;
 		return root;
 	}
 

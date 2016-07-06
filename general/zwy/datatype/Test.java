@@ -30,6 +30,7 @@ public class Test{
 		}
 		System.out.println();
 		System.out.println(r.size());
+
 		r.deleteMin();
 		iter = r.keys().iterator();
 		while(iter.hasNext()){
@@ -37,6 +38,7 @@ public class Test{
 		}
 		System.out.println();
 		System.out.println(r.size());
+		
 		r.deleteMax();
 		iter = r.keys().iterator();
 		while(iter.hasNext()){
