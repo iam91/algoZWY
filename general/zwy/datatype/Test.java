@@ -25,10 +25,43 @@ public class Test{
 			System.out.print(iter.next() + " ");
 		}
 		System.out.println();
+		System.out.println(r.size());
 
 		for(int i = 0; i < 10; i++){
 			System.out.print(r.get(f[i]) + " ");
 		}
 		System.out.println();
+
+		r.deleteMin();
+		iter = r.keys().iterator();
+		while(iter.hasNext()){
+			System.out.print(iter.next() + " ");
+		}
+		System.out.println();
+		System.out.println(r.size());
+
+		r.deleteMax();
+		iter = r.keys().iterator();
+		while(iter.hasNext()){
+			System.out.print(iter.next() + " ");
+		}
+		System.out.println();
+		System.out.println(r.size());
+
+		r.delete(2);
+		iter = r.keys().iterator();
+		while(iter.hasNext()){
+			System.out.print(iter.next() + " ");
+		}
+		System.out.println();
+		System.out.println(r.size());
+
+		r.delete(5);
+		iter = r.keys().iterator();
+		while(iter.hasNext()){
+			System.out.print(iter.next() + " ");
+		}
+		System.out.println();
+		System.out.println(r.size());
 	}
 }

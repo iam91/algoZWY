@@ -118,7 +118,45 @@ public class RedBlackTreeSymbolTable<K extends Comparable<K>, V>
 	}
 
 	public void delete(K key){
+		if(root != null){
+			root = delete(key, root);
+		}
+	}
 
+	private Node delete(K key, Node root){
+		int cmp = key.compareTo(root.key);
+		if(cmp < 0){
+			if(!isRed(root.left) && !isRed(root.left.left)){
+				root = moveRedLeft(root);
+			}
+			root.left = delete(key, root.left);
+		}
+		else if(cmp > 0){
+			if(isRed(root.left)){
+				root = rotateRight(root);
+			}
+			if(!isRed(root.right) && !isRed(root.right.left)){
+				root = moveRedRight(root);
+			}
+			root.right = delete(key, root.right);
+		}
+		else{
+			if(isRed(root.left)){
+				root = rotateRight(root);
+			}
+			Node rightMinNode = min(root.right);
+			if(rightMinNode == null){
+				return null;
+			}
+			else{
+				root.key = rightMinNode.key;
+				root.value = rightMinNode.value;
+				root.right = deleteMin(root.right);
+			}
+		}
+		root = fixUp(root);
+		root.size = 1 + size(root.right) + size(root.left);
+		return root;
 	}
 
 	public boolean contains(K key){
@@ -141,7 +179,24 @@ public class RedBlackTreeSymbolTable<K extends Comparable<K>, V>
 		}
 	}
 
-	public K min(){return null;}
+	public K min(){
+		Node minNode = min(root);
+		if(minNode != null){
+			return minNode.key;
+		}
+		return null;
+	}
+
+	private Node min(Node root){
+		if(root == null){
+			return null;
+		}
+		if(root.left == null){
+			return root;
+		}
+		return min(root.left);
+	}
+
 	public K max(){return null;}
 	public K floor(K key){return null;}
 	public K ceiling(K key){return null;}
@@ -180,9 +235,6 @@ public class RedBlackTreeSymbolTable<K extends Comparable<K>, V>
 	public void deleteMax(){
 		if(root != null){
 			root = deleteMax(root);
-			if(!isEmpty()){
-				root.color = BLACK;
-			}
 		}
 	}
 
@@ -197,7 +249,8 @@ public class RedBlackTreeSymbolTable<K extends Comparable<K>, V>
 			root = moveRedRight(root);
 		}
 		root.right = deleteMax(root.right);
-		root.size = size(root.left) + size(root.right) + 1;
+		root = fixUp(root);
+		root.size = 1 + size(root.left) + size(root.right);
 		return root;
 	}
 
