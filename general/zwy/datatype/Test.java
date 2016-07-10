@@ -4,7 +4,7 @@ import java.util.Iterator;
 
 public class Test{
 	public static void main(String[] args){
-		Integer[] f = {1, 5, 7, 0, 2, 6, 9, -1, -3, 45};
+		Integer[] f = {1, 5, 7, 2, 6, 9, -1, -3, 45, 23, 19};
 		BSTSymbolTable<Integer, Integer> t 
 			= new BSTSymbolTable<Integer, Integer>();
 		BinarySearchSymbolTable<Integer, Integer> p
@@ -12,7 +12,7 @@ public class Test{
 		RedBlackTreeSymbolTable<Integer, Integer> r
 			= new RedBlackTreeSymbolTable<Integer, Integer>();
 
-		for(int i = 0; i < 10; i++){
+		for(int i = 0; i < 11; i++){
 			t.put(f[i], f[i] + 1);
 			p.put(f[i], f[i] + 1);
 			r.put(f[i], f[i] + 1);
