@@ -29,6 +29,10 @@ public class SeperateChainingHashST<K, V> extends SymbolTable<K, V>{
 		}
 
 		public void put(K key, V val){
+			/*
+			 *
+			 *
+			 */
 			int h = hash(key);
 			if(!st[h].contains(key)){
 				n++;
@@ -37,6 +41,10 @@ public class SeperateChainingHashST<K, V> extends SymbolTable<K, V>{
 		}
 
 		public void delete(K key){
+			/*
+			 *
+			 *
+			 */
 			if(!st[h].contains(key)){
 				n++;
 			}
