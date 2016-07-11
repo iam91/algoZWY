@@ -25,35 +25,47 @@ public class SeperateChainingHashST<K, V> extends SymbolTable<K, V>{
 		}
 
 		public V get(K key){
+			if(key == null){
+				return null;
+			}
 			return st[hash(key)].get(key);
 		}
 
 		public void put(K key, V val){
-			/*
-			 *
-			 *
-			 */
-			int h = hash(key);
-			if(!st[h].contains(key)){
-				n++;
+			if(key == null || val == null){
+				return;
 			}
-			st[h].put(key, val);
+			SequentialSearchSymbolTable<K, V> list = st[hash(key)];
+			n -= list.size();
+			list.put(key, val);
+			n += list.size();
 		}
 
 		public void delete(K key){
-			/*
-			 *
-			 *
-			 */
-			if(!st[h].contains(key)){
-				n++;
+			if(key == null){
+				return;
 			}
-			st[hash(key)].delete(key);
-			n--;
+			SequentialSearchSymbolTable<K, V> list = st[hash(key)];
+			n -= list.size();
+			list.delete(key);
+			n += list.size();
 		}
 
 		public boolean contains(K key){
+			if(key == null){
+				return false;
+			}
 			return st[hash(key)].contains(key);
+		}
+
+		public void p(){
+			for(int i = 0; i < m; i++){
+				Iterator<K> iter = st[i].keys().iterator();
+				while(iter.hasNext()){
+					System.out.print(iter.next() + " ");
+				}
+				System.out.println();
+			}
 		}
 
 		public Iterable<K> keys(){
@@ -61,14 +73,14 @@ public class SeperateChainingHashST<K, V> extends SymbolTable<K, V>{
 				public Iterator<K> iterator(){
 					return new Iterator<K>(){
 
-						private int currList = 0;
-						private Iterator<K> currIter = st[currList].keys().iterator();
+						private int nextList = 1;
+						private Iterator<K> currIter = st[0].keys().iterator();
 
 						public boolean hasNext(){
 							if(!currIter.hasNext()){
-								while(!currIter.hasNext() && currList < m){
-									currIter = st[currList].keys().iterator();
-									currList++;
+								while(!currIter.hasNext() && nextList < m){
+									currIter = st[nextList].keys().iterator();
+									nextList++;
 								}
 							}
 							return currIter.hasNext();

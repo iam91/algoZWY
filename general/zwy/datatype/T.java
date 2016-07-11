@@ -4,11 +4,15 @@ import java.util.Iterator;
 
 public class T{
 	public static void main(String[] args){
-		Integer[] f = {1, 5, 7, 0, 2, 6, 9, -1, -3, 45};
+		Integer[] f = {1, 5, 7, 0, 119, 2, 6, 9, -1, -3, 45, 23, 19};
+		//Integer[] f = {0};
 		SeperateChainingHashST<Integer, Integer> t
-			= new SeperateChainingHashST<Integer, Integer>();
+			= new SeperateChainingHashST<Integer, Integer>(5);
 
-		for(int i = 0; i < 10; i++){
+		Integer ii = 0;
+		System.out.println(ii.hashCode());
+
+		for(int i = 0; i < f.length; i++){
 			t.put(f[i], f[i] + 1);
 			System.out.print(f[i] + " ");
 		}
@@ -20,5 +24,7 @@ public class T{
 		}
 		System.out.println();
 		System.out.println(t.size());
+		System.out.println("=====================================");
+		//t.p();
 	}
 }
