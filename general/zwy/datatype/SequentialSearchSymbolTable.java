@@ -4,10 +4,11 @@ import java.util.Iterator;
 
 public class SequentialSearchSymbolTable<K, V> extends SymbolTable<K, V>{
 	private Node head;
+	private int n;
 
 	public SequentialSearchSymbolTable(){
-		super();
 		head = null;
+		n = 0;
 	}
 
 	public void put(K key, V val){

@@ -13,7 +13,6 @@ public class BinarySearchSymbolTable<K extends Comparable<K>, V>
 	private int n;
 
 	public BinarySearchSymbolTable(){
-		super();
 		keys = (K[])new Comparable[1];
 		values = (V[])new Object[1];
 		n = 0;

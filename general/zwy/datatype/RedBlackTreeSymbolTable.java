@@ -11,7 +11,6 @@ public class RedBlackTreeSymbolTable<K extends Comparable<K>, V>
 	private Node root;
 
 	public RedBlackTreeSymbolTable(){
-		super();
 		root = null;
 	}
 

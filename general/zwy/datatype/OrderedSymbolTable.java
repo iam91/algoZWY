@@ -2,8 +2,6 @@ package zwy.datatype;
 
 public abstract class OrderedSymbolTable<K extends Comparable<K>, V>{
 	
-	public OrderedSymbolTable(){}
-
 	public abstract void put(K key, V val);
 	public abstract V get(K key);
 	public abstract void delete(K key);

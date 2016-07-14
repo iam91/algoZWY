@@ -5,6 +5,7 @@ import java.util.Iterator;
 public class SeperateChainingHashST<K, V> extends SymbolTable<K, V>{
 
 		private int m;
+		private int n;
 		private SequentialSearchSymbolTable<K, V>[] st;
 
 		public SeperateChainingHashST(){
@@ -12,7 +13,7 @@ public class SeperateChainingHashST<K, V> extends SymbolTable<K, V>{
 		}
 
 		public SeperateChainingHashST(int m){
-			super();
+			this.n = 0;
 			this.m = m;
 			st = (SequentialSearchSymbolTable<K, V>[])new SequentialSearchSymbolTable[m];
 			for(int i = 0; i < m; i++){
@@ -94,5 +95,13 @@ public class SeperateChainingHashST<K, V> extends SymbolTable<K, V>{
 					};
 				}
 			};
+		}
+
+		public boolean isEmpty(){
+			return n == 0;
+		}
+
+		public int size(){
+			return n;
 		}
 	}
