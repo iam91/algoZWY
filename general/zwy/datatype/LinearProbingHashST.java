@@ -4,6 +4,7 @@ import java.util.Iterator;
 
 public class LinearProbingHashST<K, V> extends SymbolTable<K, V>{
 
+	private int n;
 	private int m;
 	private K[] keys;
 	private V[] vals;
@@ -129,5 +130,13 @@ public class LinearProbingHashST<K, V> extends SymbolTable<K, V>{
 				};
 			}
 		};
+	}
+
+	public boolean isEmpty(){
+		return n == 0;
+	}
+
+	public int size(){
+		return n;
 	}
 }

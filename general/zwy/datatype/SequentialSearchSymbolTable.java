@@ -95,6 +95,14 @@ public class SequentialSearchSymbolTable<K, V> extends SymbolTable<K, V>{
 		};
 	}
 
+	public boolean isEmpty(){
+		return n == 0;
+	}
+
+	public int size(){
+		return n;
+	}
+
 	private class Node{
 		K key;
 		V value;
