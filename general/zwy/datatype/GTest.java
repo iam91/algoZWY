@@ -12,14 +12,35 @@ public class GTest{
 		LinkedListQueue<Integer> queue = new LinkedListQueue<Integer>();
 		LinkedListStack<Integer> stack = new LinkedListStack<Integer>();
 
-		ConnectedComponent cc = new ConnectedComponent(gl);
+		ConnectedComponent cc = new UFConnectedComponent(gl);
+		
+		UnionFind uf = new UnionFind(a.length);
+		for(int i = 0; i < a.length; i++){
+			uf.union(a[i], b[i]);
+		}
+
+		Cycle cycle = new Cycle(gl);
+		System.out.println("has cycle: " + cycle.hasCycle());
+		/*
+		System.out.println(uf.count());
+		System.out.println(uf.connected(0, 4));
+		System.out.println(uf.connected(2, 12));
+		System.out.println(uf.connected(7, 8));
+		System.out.println(uf.connected(8, 10));
+		*/
+		
 		System.out.println(cc.count());
-		System.out.println(cc.toString());
+		//System.out.println(cc.toString());
 		System.out.println(cc.connected(0, 4));
 		System.out.println(cc.connected(0, 9));
+		System.out.println(cc.connected(2, 12));
+		System.out.println(cc.connected(7, 8));
+		System.out.println(cc.connected(8, 10));
 		System.out.println(cc.id(3));
 		System.out.println(cc.id(10));
 		System.out.println(cc.id(8));
+
+		
 		/*
 		for(int i = 0; i < a.length; i++){
 			queue.enqueue(a[i]);
