@@ -12,6 +12,15 @@ public class GTest{
 		LinkedListQueue<Integer> queue = new LinkedListQueue<Integer>();
 		LinkedListStack<Integer> stack = new LinkedListStack<Integer>();
 
+		ConnectedComponent cc = new ConnectedComponent(gl);
+		System.out.println(cc.count());
+		System.out.println(cc.toString());
+		System.out.println(cc.connected(0, 4));
+		System.out.println(cc.connected(0, 9));
+		System.out.println(cc.id(3));
+		System.out.println(cc.id(10));
+		System.out.println(cc.id(8));
+		/*
 		for(int i = 0; i < a.length; i++){
 			queue.enqueue(a[i]);
 			stack.push(a[i]);
@@ -59,5 +68,6 @@ public class GTest{
 			}
 			System.out.println();
 		}
+		*/
 	}
 }
