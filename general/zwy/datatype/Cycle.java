@@ -10,7 +10,7 @@ public class Cycle{
 		for(int i = 0; i < v; i++){
 			if(!visited[i]){
 				dfs(graph, i, i);
-			}
+			} 
 		}
 	}
 

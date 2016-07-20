@@ -21,6 +21,8 @@ public class GTest{
 
 		Cycle cycle = new Cycle(gl);
 		System.out.println("has cycle: " + cycle.hasCycle());
+		Bipartite bipar = new Bipartite(gl);
+		System.out.println("is bipartite: " + bipar.isBipartite());
 		/*
 		System.out.println(uf.count());
 		System.out.println(uf.connected(0, 4));
