@@ -10,10 +10,23 @@ public class DigTest{
 
 		System.out.println(gl.toString());
 		DirectedCycle d = new DirectedCycle(gl);
+		DepthFirstOrder dfo = new DepthFirstOrder(gl);
 		if(d.hasCycle()){
 			for(int i: d.cycle()){
 				System.out.print(i + " ");
 			}
+		}
+		System.out.println();
+		for(int i: dfo.pre()){
+			System.out.print(i + " ");
+		}
+		System.out.println();
+		for(int i: dfo.post()){
+			System.out.print(i + " ");
+		}
+		System.out.println();
+		for(int i: dfo.reversePost()){
+			System.out.print(i + " ");
 		}
 		System.out.println();
 	}

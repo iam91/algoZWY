@@ -21,6 +21,9 @@ public class Cycle{
 	private void dfs(Graph graph, int s, int c){
 		visited[c] = true;
 		for(int neighbor: graph.adj(c)){
+			if(hasCycle){
+				return;
+			}
 			if(!visited[neighbor]){
 				dfs(graph, c, neighbor);
 			}

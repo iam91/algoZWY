@@ -42,7 +42,6 @@ public class DirectedCycle{
 				dfs(graph, neighbor);
 			}
 			else if(onStack[neighbor]){
-				System.out.println();
 				hasCycle = true;
 				cycle = (LinkedListStack<Integer>)new LinkedListStack();
 				for(int i = s; i != neighbor; i = edgeTo[i]){
@@ -50,7 +49,6 @@ public class DirectedCycle{
 				}
 				cycle.push(neighbor);
 				cycle.push(s);
-				return;
 			}
 		}
 		onStack[s] = false;
