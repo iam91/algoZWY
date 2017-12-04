@@ -7,15 +7,14 @@ def generate_one_item_set(dataSet):
                 C1.append(item)
     return C1
 
-def generate_k_item_set(k_minus_one_item, min_support_count, k):
+def generate_k_item_set(k_minus_one_item, k):
     ret = []
     n = len(k_minus_one_item)
     for i in range(n):
         for j in range(i + 1, n):
             a = list(k_minus_one_item[i])
             b = list(k_minus_one_item[j])
-            a.sort()
-            b.sort()
+            a.sort(); b.sort()
             if a[:k - 2] == b[:k - 2]:
                 ret.append(k_minus_one_item[i] | k_minus_one_item[j])
     return ret
@@ -57,8 +56,7 @@ def apriori(dataSet, min_support=0.5):
     # compute frequent k item set
     k_minus_one_item = one_item
     for k in range(2, len(one_item)):
-        k_item = generate_k_item_set(\
-            k_minus_one_item, min_support_count, k)
+        k_item = generate_k_item_set(k_minus_one_item, k)
         if(len(k_item) < 1):
             break
             
