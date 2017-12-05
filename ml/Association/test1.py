@@ -28,7 +28,12 @@ if __name__ == '__main__':
     print '-' * 10
     freq = findFreqItemSets(dataSet, minSupportCount=3)
 
-    t = [set(['y']), set(['y', 'z']), set(['y', 'x', 'z']), set(['y', 'x']),
+    bench = [set(['y']), set(['y', 'z']), set(['y', 'x', 'z']), set(['y', 'x']),
         set(['s']), set(['x', 's']), set(['t']), set(['y', 't']), set(['x', 't']), set(['y', 'x', 't']), set(['z', 't']), set(['y', 'z', 't']),
         set(['x', 'z', 't']), set(['y', 'x', 'z', 't']), set(['r']), set(['x']),
         set(['x', 'z']), set(['z'])]
+
+    # test
+    assert len(bench) == len(freq), "number of freq set doesn't match"
+    for b in bench:
+        assert b in freq, 'wrong freq set'
