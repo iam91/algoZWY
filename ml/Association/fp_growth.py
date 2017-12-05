@@ -47,9 +47,9 @@ def getSortedDataSet(dataSet, headerTable):
 
 def createTree(dataSet, counts, minSupportCount=1):
     headerTable = createHeaderTable(dataSet, counts, minSupportCount)
-
     if(len(headerTable) < 1):
         return None, None
+        
     dataSetSorted = getSortedDataSet(dataSet, headerTable)
 
     root = Node('null', 0, None)
