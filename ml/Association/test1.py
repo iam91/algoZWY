@@ -17,4 +17,5 @@ if __name__ == '__main__':
 
     print createHeaderTable(dataSet)
     print '-' * 10
-    print createTree(dataSet)
+    root = createTree(dataSet, minSupportCount=3)
+    root.disp()
