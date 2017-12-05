@@ -12,14 +12,15 @@ class Node(object):
             child.disp(ind + 1)
 
 
-def createHeaderTable(dataSet, minSupportCount=1):
+def createHeaderTable(dataSet, counts, minSupportCount=1):
     headerTable = {}
-    for transaction in dataSet:
+    for i, transaction in enumerate(dataSet):
         for item in transaction:
-            headerTable[item] = headerTable.get(item, 0) + 1
+            headerTable[item] = headerTable.get(item, 0) + counts[i]
 
     for item in headerTable.keys():
         if(headerTable[item] < minSupportCount):
+            # remove infrequent items
             del headerTable[item] 
         else:
             headerTable[item] = [headerTable[item], None]
@@ -44,29 +45,30 @@ def getSortedDataSet(dataSet, headerTable):
     return dataSetSorted
 
 
-def createTree(dataSet, minSupportCount=1):
-    headerTable = createHeaderTable(dataSet, minSupportCount)
+def createTree(dataSet, counts, minSupportCount=1):
+    headerTable = createHeaderTable(dataSet, counts, minSupportCount)
 
-    # TODO check number of header table
+    if(len(headerTable) < 1):
+        return None, None
     dataSetSorted = getSortedDataSet(dataSet, headerTable)
 
     root = Node('null', 0, None)
-    for transaction in dataSetSorted:
-        updateTree(root, transaction, headerTable)
+    for i, transaction in enumerate(dataSetSorted):
+        updateTree(root, transaction, headerTable, counts[i])
 
-    return root
+    return root, headerTable
 
 
-def updateTree(currNode, items, headerTable):
+def updateTree(currNode, items, headerTable, count):
     firstItem = items[0]
     if(firstItem in currNode.children):
-        currNode.children[firstItem].count += 1
+        currNode.children[firstItem].count += count
     else:
-        newNode = Node(firstItem, 1, currNode)
+        newNode = Node(firstItem, count, currNode)
         currNode.children[firstItem] = newNode
         updateHeaderTable(firstItem, newNode, headerTable)
     if(len(items) > 1):
-        updateTree(currNode.children[firstItem], items[1::], headerTable)
+        updateTree(currNode.children[firstItem], items[1:], headerTable, count)
     
     return currNode 
 
@@ -79,3 +81,51 @@ def updateHeaderTable(item, newNode, headerTable):
         while(currLink.next != None):
             currLink = currLink.next 
         currLink.next = newNode
+
+def findCondPattBase(condItem, headerTable):
+    condPatt = []
+    condPattCount = []
+    linkNode = headerTable[condItem][1]
+    while(linkNode != None):
+        # traverse link list
+        prefix = []
+        treeNode = linkNode
+        while(treeNode.parent != None):
+            # traverse tree
+            prefix.insert(0, treeNode.item)
+            treeNode = treeNode.parent
+
+        if(len(prefix) > 1):
+            condPatt.append(prefix[:-1])
+            condPattCount.append(linkNode.count)
+
+        linkNode = linkNode.next
+    return condPatt, condPattCount
+
+def mineTree(headerTable, suffix, freqItemSet, minSupportCount):
+    currSuffix = [x[0] for x in sorted(headerTable.items(), \
+        key=lambda y: y[1][0])]
+
+    for suff in currSuffix:
+        newSuffix = suffix.copy()
+        newSuffix.add(suff)
+        freqItemSet.append(newSuffix)
+
+        condPatt, condPattCount = \
+            findCondPattBase(suff, headerTable)
+        condTree, condHeaderTable = createTree(condPatt, \
+            condPattCount, minSupportCount)
+        if condTree != None:
+            mineTree(condHeaderTable, newSuffix, freqItemSet, minSupportCount)
+
+def findFreqItemSets(dataSet, minSupportCount=1):
+    counts = []
+    for i in range(len(dataSet)):
+        counts.append(1)
+
+    root, headerTable = createTree(dataSet, counts, minSupportCount)
+
+    freqItemSet = []
+    mineTree(headerTable, set([]), freqItemSet, minSupportCount)
+
+    return freqItemSet

@@ -1,6 +1,7 @@
 from fp_growth import createHeaderTable
 from fp_growth import createTree
-
+from fp_growth import findCondPattBase
+from fp_growth import findFreqItemSets
 
 def loadDataSet():
     return [['r', 'z', 'h', 'j', 'p'],
@@ -14,8 +15,20 @@ def loadDataSet():
 if __name__ == '__main__':
 
     dataSet = loadDataSet()
-
-    print createHeaderTable(dataSet)
+    print dataSet
     print '-' * 10
-    root = createTree(dataSet, minSupportCount=3)
+    
+    counts = []
+    for i in range(len(dataSet)):
+        counts.append(1)
+
+    root, headerTable = createTree(dataSet, counts, minSupportCount=3)
     root.disp()
+
+    print '-' * 10
+    freq = findFreqItemSets(dataSet, minSupportCount=3)
+
+    t = [set(['y']), set(['y', 'z']), set(['y', 'x', 'z']), set(['y', 'x']),
+        set(['s']), set(['x', 's']), set(['t']), set(['y', 't']), set(['x', 't']), set(['y', 'x', 't']), set(['z', 't']), set(['y', 'z', 't']),
+        set(['x', 'z', 't']), set(['y', 'x', 'z', 't']), set(['r']), set(['x']),
+        set(['x', 'z']), set(['z'])]
